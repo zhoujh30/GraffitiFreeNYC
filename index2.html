@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head profile="http://www.w3.org/2005/10/profile">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <!-- <link rel="icon" href="./favicon.ico"> -->
+
+    <title>NYC Graffiti Complaints Visualization</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="http://libs.cartocdn.com/cartodb.js/v3/3.15/themes/css/cartodb.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+
+    <!-- <link rel="icon" type="image/png" href="./favicon.png"> -->
+  </head>
+
+  <style>
+    html, body, #container {
+      height: 100%;
+      width: 100%;
+      overflow: hidden;
+    }
+
+    body {
+      padding-top: 50px;
+    }
+
+    #map {
+      width: auto;
+      height: 100%;
+      box-shadow: 0 0 10px rgba(0,0,0,0.55);
+    }
+
+    #sidebar {
+      width: 200px;
+      height: 100%;
+      max-width: 100%;
+      float: left;
+      -webkit-transition: all 0.25s ease-out;
+      -moz-transition: all 0.25s ease-out;
+      transition: all 0.25s ease-out;
+    }
+
+    .navbar .navbar-brand {
+      font-weight: bold;
+      font-size: 25px;
+      color: #FFFFFF;
+    }
+
+    .navbar {
+      background-image: linear-gradient(to bottom, #2b6988 0%, #1f4b61 100%);
+    }
+
+    .navbar-inverse .navbar-nav>li>a {
+      color: #fff;
+    }
+
+    .mapButton {
+      height: 50px;
+      margin-left: 33px;
+    }
+
+    div.cartodb-timeslider .slider-wrapper {
+    width: 282px;
+    }
+
+  </style>
+
+  <body>
+
+    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <div class="navbar-icon-container">
+            <a href="#" class="navbar-icon pull-right visible-xs" id="nav-btn"><i class="fa fa-bars fa-lg white"></i></a>
+            <a href="#" class="navbar-icon pull-right visible-xs" id="sidebar-toggle-btn"><i class="fa fa-search fa-lg white"></i></a>
+          </div>
+          <a class="navbar-brand" href="#">NYC Graffiti Complaints Visualization</a>
+        </div>
+        <div class="navbar-collapse collapse">
+          <form class="navbar-form navbar-right" role="search">
+            <div class="form-group has-feedback">
+                <span class="twitter-typeahead" style="position: static; display: block; direction: ltr;"><input id="searchbox" type="text" placeholder="Search" class="form-control tt-input" autocomplete="off" spellcheck="false" dir="auto" style="position: relative; vertical-align: top;"><pre aria-hidden="true" style="position: absolute; visibility: hidden; white-space: pre; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; word-spacing: 0px; letter-spacing: 0px; text-indent: 0px; text-rendering: auto; text-transform: none;"></pre><span class="tt-dropdown-menu" style="position: absolute; top: 100%; left: 0px; z-index: 100; display: none; right: auto;"><div class="tt-dataset-Boroughs"></div><div class="tt-dataset-Theaters"></div><div class="tt-dataset-Museums"></div><div class="tt-dataset-GeoNames"></div></span></span>
+                <span id="searchicon" class="fa fa-search form-control-feedback"></span>
+            </div>
+          </form>
+          <ul class="nav navbar-nav">
+            <li><a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" id="about-btn"><i class="fa fa-question-circle white"></i>&nbsp;&nbsp;About</a></li>
+            <li class="dropdown">
+              <a id="toolsDrop" href="#" role="button" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-globe white"></i>&nbsp;&nbsp;Tools <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li><a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" id="full-extent-btn"><i class="fa fa-arrows-alt"></i>&nbsp;&nbsp;Zoom To Full Extent</a></li>
+                <li><a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" id="legend-btn"><i class="fa fa-picture-o"></i>&nbsp;&nbsp;Show Legend</a></li>
+                <li class="divider hidden-xs"></li>
+                <li><a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" id="login-btn"><i class="fa fa-user"></i>&nbsp;&nbsp;Login</a></li>
+              </ul>
+            </li>
+            <li class="dropdown">
+                <a class="dropdown-toggle" id="downloadDrop" href="#" role="button" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-cloud-download white"></i>&nbsp;&nbsp;Download <b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                  <li><a href="data/boroughs.geojson" download="boroughs.geojson" target="_blank" data-toggle="collapse" data-target=".navbar-collapse.in"><i class="fa fa-download"></i>&nbsp;&nbsp;Boroughs</a></li>
+                  <li><a href="data/subways.geojson" download="subways.geojson" target="_blank" data-toggle="collapse" data-target=".navbar-collapse.in"><i class="fa fa-download"></i>&nbsp;&nbsp;Subway Lines</a></li>
+                  <li><a href="data/DOITT_THEATER_01_13SEPT2010.geojson" download="theaters.geojson" target="_blank" data-toggle="collapse" data-target=".navbar-collapse.in"><i class="fa fa-download"></i>&nbsp;&nbsp;Theaters</a></li>
+                  <li><a href="data/DOITT_MUSEUM_01_13SEPT2010.geojson" download="museums.geojson" target="_blank" data-toggle="collapse" data-target=".navbar-collapse.in"><i class="fa fa-download"></i>&nbsp;&nbsp;Museums</a></li>
+                </ul>
+            </li>
+            <li class="hidden-xs"><a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" id="list-btn"><i class="fa fa-list white"></i>&nbsp;&nbsp;POI List</a></li>
+          </ul>
+        </div><!--/.navbar-collapse -->
+      </div>
+    </div>
+
+    <div id="container">
+      <div id="sidebar">
+        </br>
+        <div class="btn-group-vertical" role="group" aria-label="...">
+          <button id="one" type="button" class="btn btn-success mapButton">Time Series</button></br>
+          <button id="two" type="button" class="btn btn-primary mapButton">Points</button></br>
+        </div>
+      </div>
+      <div id="map">
+      </div>
+
+    </div><!-- /.container -->
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="http://libs.cartocdn.com/cartodb.js/v3/3.15/cartodb.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <script>
+
+    var map = new L.Map('map', { 
+      center: [40.7127,-74.0059],
+      zoom: 10
+    });
+
+    L.tileLayer('http://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',{
+      attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'
+    }).addTo(map);
+
+    var layerUrl2 = 'https://jz1894.cartodb.com/api/v2/viz/86bd6dc4-ef21-11e5-a907-0e3ff518bd15/viz.json';
+
+    var layerUrl1 = 'https://jz1894.cartodb.com/api/v2/viz/a4d8b084-efa3-11e5-a33c-0e5db1731f59/viz.json';
+
+    // var layer1, layer2
+
+    // var map;
+    //   var baseAPI = 'https://jz1894.cartodb.com/api/v2/sql?format=GeoJSON&q=SELECT * FROM graffiti_03212016 WHERE cartodb_id = '
+
+    //   var layerGroup = new L.LayerGroup();
+
+    //   var mathChartData = [];
+    //   mathChartData[0]={};
+
+    //   var elaChartData = [];
+    //   elaChartData[0]={};
+
+    //   var mathChart, elaChart;
+
+    //   function init(){
+    //     // initiate leaflet map
+    //     map = new L.Map('map', { 
+    //       center: [40.7,-73.92],
+    //       zoom: 11
+    //     })
+    //     L.tileLayer('https://dnv9my2eseobd.cloudfront.net/v3/cartodb.map-4xtxp73f/{z}/{x}/{y}.png', {
+    //       attribution: 'Mapbox <a href="http://mapbox.com/about/maps" target="_blank">Terms &amp; Feedback</a>'
+    //     }).addTo(map);
+    //     var layerUrl1 = 'https://jz1894.cartodb.com/api/v2/viz/a4d8b084-efa3-11e5-a33c-0e5db1731f59/viz.json';
+        // var sublayers = [];
+
+    cartodb.createLayer(map, layerUrl1)
+      .addTo(map)
+      .on('done', function(layer) {
+        layer1 = layer;
+      //   layer.getSubLayer(0).setInteraction(true);
+      //   layer.on('featureOver', function(ev, pos, latlng, data){
+      //     console.log("featureover");
+      //     //check to see if it's the same feature so we don't waste an API call
+      //     if(data.cartodb_id != currentHover) {
+      //       layerGroup.clearLayers();
+          
+      //       $.getJSON(baseAPI + data.cartodb_id, function(res) {
+          
+      //         newFeature = L.geoJson(res,{
+      //           style: {
+      //             "color": "#DCFF2E",
+      //             "weight": 5,
+      //             "opacity": 1
+      //           }
+      //         });
+      //         layerGroup.addLayer(newFeature);
+      //         layerGroup.addTo(map);
+      //         updateSidebar(res.features[0].properties);
+      //         updateChart(res.features[0].properties)
+
+      //       })
+      //       currentHover = data.cartodb_id;
+      // }
+      }).on('error', function() {
+        //log the error
+      });
+
+
+    cartodb.createLayer(map, layerUrl2)
+      .addTo(map)
+      .on('done', function(layer) {
+        layer2 = layer;
+        layer2.hide();
+        $(".cartodb-timeslider").hide();
+      }).on('error', function() {
+        //log the error
+      });
+
+
+    $(".mapButton").click(function() {
+
+        if($(this).attr('id') == 'one' ) {
+          layer1.hide();
+          layer2.show();
+        } 
+
+        else if($(this).attr('id') == 'two' ) {
+          layer2.hide();
+          layer1.show();
+        }
+      });
+
+    </script>
+  </body>
+</html>

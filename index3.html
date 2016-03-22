@@ -1,0 +1,365 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <title>NYC Graffiti Complaints</title>
+  <meta name="description" content="eportfolio">
+  <meta name="author" content="Jianhao Zhou">
+
+  <link rel="stylesheet" href="css/style.css">
+  <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.6/flatly/bootstrap.min.css" rel="stylesheet" integrity="sha384-XYCjB+hFAjSbgf9yKUgbysEjaVLOXhCgATTEBpCqT1R3jvG5LGRAK5ZIyRbH5vpX" crossorigin="anonymous">
+  <link href='https://fonts.googleapis.com/css?family=Crimson+Text' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Righteous' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="http://libs.cartocdn.com/cartodb.js/v3/3.15/themes/css/cartodb.css" />
+
+
+  <style type="text/css">
+
+    #complaintsbyzipMap, #TimeSeriesMap {
+      /*width: 100%;*/
+      height: 500px;
+      background-color: gray;
+    }
+
+   /* #NebeToolMap {
+      width: 100%;
+      height: 500px;
+      background-color: gray;
+    }*/
+
+    .myButton {
+      width: 80px;
+      height: 25px;
+      margin-bottom: 50px;
+      font-size: 12px;
+      border-radius: 10px;
+      margin-right: 10px;
+    }
+	  
+    .mapButton {
+      /*width: 100px;*/
+      height: 50px;
+      /*margin-bottom: 50px;*/
+      /*font-size: 12px;*/
+      /*border-radius: 10px;*/
+      /*margin-right: 10px;*/
+    }
+
+    .bg {
+      background: url('data/bg.jpg') no-repeat center center;
+      position: fixed;
+      width: 100%;
+      height: 690px; /*same height as jumbotron */
+      top:0;
+      left:0;
+      z-index: -1;
+    }
+
+    .jumbotron {
+      height: 690px;
+      padding-top: 190px;
+      padding-left: 85px;
+      color: white;
+      text-shadow: #444 0 5px 5px;
+      background: transparent;
+    }
+
+    .googlefont1 {
+      font-family: 'Righteous', cursive;
+    }
+
+/*    .googlefont2 {
+      font-family: 'Righteous', cursive;
+    }*/
+
+    .col-md-3 {
+      padding-left: 35px;
+      position: center;
+      font-size: 16;
+    }
+
+    #info {
+      background: #FFFFFF;
+      padding: 10px;
+      border-radius: 10px;
+      font: bold, 10px;
+      position: relative;
+      top: -475px;
+      width: auto;
+      display: inline;
+      margin-left: 310px;
+    }
+
+    #courseImg {
+      height: 420px;
+      width: 840px;
+    }
+
+    #linkedin {
+      margin-top: 13px;
+      margin-right: 13px;
+      height: 33px;
+      width: 166px;
+    }
+
+    div.cartodb-timeslider .slider-wrapper {
+    width: 282px;
+    }
+
+  </style>
+
+
+</head>
+
+<body>
+  <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container-fluid">
+      <!-- Brand and toggle get grouped for better mobile display -->
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#top">NYC Graffiti Complaints</a>
+      </div>
+
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <ul class="nav navbar-nav">
+          <li class="active"><a href="#about">About<span class="sr-only">(current)</span></a></li>
+         <!--  <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Projects<span class="caret"></span></a> -->
+         <!--    <ul class="dropdown-menu">
+              <li><a href="#complaintsbyzip">Complaints by Zip</a></li>
+              <li><a href="#">Neighborhood Tool</a></li>
+              <li><a href="#">Something else here</a></li>
+              <li role="separator" class="divider"></li>
+              <li><a href="https://db.tt/yoFH3baF", target="_blank">Neighborhood Planning Tool</a></li>
+              <li role="separator" class="divider"></li>
+              <li><a href="https://github.com/zhoujh30/PUI2015_jzhou/blob/master/Final/PUI2015_final_JianhaoZhou.ipynb", target="_blank">Asthma Factor Study</a></li>
+            </ul> -->
+          <!-- </li> -->
+          <li><a href="#complaintsbyzip">Choropleth</a></li>
+          <li><a href="#TimeSeries">Time Series</a></li>
+        </ul>
+       <!--  <form class="navbar-form navbar-left" role="search">
+          <div class="form-group">
+            <input type="text" class="form-control" placeholder="Search">
+          </div>
+          <button type="submit" class="btn btn-default">Submit</button>
+        </form> -->
+        <ul class="nav navbar-nav navbar-right">
+          <!-- <a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" id="about-btn"><i class="fa fa-question-circle white"></i>&nbsp;&nbsp;About</a> -->
+
+          <!-- <li><a href="#" data-toggle="modal" data-target="#myModal">Contact Me</a></li> -->
+        </ul>
+      </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+  </nav>
+
+  <!-- Modal -->
+  <div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Contact Me</h4>
+        </div>
+        <div class="modal-body">
+
+          <p>felix.zhou@nyu.edu</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="bg"></div>
+  <div class="jumbotron" id='top'>
+    <h1 class='googlefont1'>Welcome!</h1>
+    <p class='googlefont1'>NYC Graffiti Complaints Visualization</p>
+    <p><a class="btn btn-primary btn-lg" href="#about" role="button"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> Learn more</a></p>
+  </div>
+
+  <div class="row">
+    <div class="col-md-3" id='about'>
+      <h1>About</h1>
+    </div>
+    <div class="container",class="col-md-9">
+      </br>
+      <p class="col-md-9">
+        I am Jianhao (Felix) Zhou, a Master of Urban Planning Candidate at NYU Wagner specializing in Environment, Infrastructure and Transportation. I am currently working as an Intern with the Planning, Development, and Transportation Division of New York City
+      </p>
+    </div>
+  </div>
+  </br>
+  </br>
+  </br>
+
+  <div class="row">
+    <div class="col-md-3" id='complaintsbyzip'>
+      <h1>Choropleth</h1>
+    </div>
+    <div class="container",class="col-md-9">
+      </br>
+      <p class="col-md-9">The Best for NYC Challenge is a free, online tool to help you compare your business's impact on NYC workers, communities, and the environment against 8,000+ businesses and provides free resources to improve. Here is a map of all participant companies.</p>
+    </div>
+  </div>
+  </br>
+
+  <div class="row">
+    <div class="col-md-3">
+      <div class="btn-group-vertical" role="group" aria-label="...">
+          <h5>Change Map Style Here:</h5></br>
+          <button id="one" type="button" class="btn btn-success mapButton">Default</button></br>
+          <button id="two" type="button" class="btn btn-primary mapButton">Thunderforest</button></br>
+          <button id="three" type="button" class="btn btn-danger mapButton">Watercolor</button>
+      </div>
+    </div>
+    <div class="container",class="col-md-9">
+      <div id="complaintsbyzipMap"></div>
+      <!-- <div id="info"></div> -->
+    </div>
+  </div>
+  </br>
+  </br>
+  </br>
+
+  <div class="row">
+    <div class="col-md-3" id='TimeSeries'>
+      <h1>Time Series</h1>
+    </div>
+    <div class="container",class="col-md-9">
+      </br>
+      <p class="col-md-9">The Best for NYC Challenge is a free, online tool to help you compare your business's impact on NYC workers, communities, and the environment against 8,000+ businesses and provides free resources to improve. Here is a map of all participant companies.</p>
+    </div>
+  </div>
+  </br>
+
+  <div class="row">
+    <div class="col-md-3">
+      <div class="btn-group-vertical" role="group" aria-label="...">
+          <h5>Change Map Style Here:</h5></br>
+      </div>
+    </div>
+    <div class="container",class="col-md-9">
+      <div id="TimeSeriesMap"></div>
+    </div>
+  </div>
+    
+  </br>
+  </br>
+  </br>
+  </br>
+  </br>
+
+<!--   <nav class="navbar navbar-default navbar-fixed-bottom">
+    <div class="container-fluid"> -->
+        <!-- Brand and toggle get grouped for better mobile display -->
+<!--         <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#top">Return to top</a>
+        </div>
+        
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <ul class="nav navbar-nav navbar-right">
+ -->            <!-- <li class="active"><a href="#about">About<span class="sr-only">(current)</span></a></li> -->
+           <!--  <a href="https://www.linkedin.com/pub/jianhao-felix-zhou/35/50b/a8"  target="_blank">
+              <img id='linkedin' src="https://static.licdn.com/scds/common/u/img/webpromo/btn_viewmy_160x33.png" border="0" alt="View Jianhao (Felix) Zhou's profile on LinkedIn">
+            </a>
+            <li><a href="mailto:felix.zhou@nyu.edu">felix.zhou@nyu.edu</a></li>
+          </ul>
+        </div>
+    </div>
+  </nav> -->
+
+  <script src="http://libs.cartocdn.com/cartodb.js/v3/3.15/cartodb.js"></script>
+  <script src="js/jquery.js"></script>
+  <script src="js/javascript.js"></script> 
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+  
+  <script type="text/javascript">
+
+    var jumboHeight = $('.jumbotron').outerHeight();
+    function parallax(){
+        var scrolled = $(window).scrollTop();
+        $('.bg').css('height', (jumboHeight-scrolled) + 'px');
+    }
+
+    $(window).scroll(function(e){
+        parallax();
+    });
+  
+    var layer1 = L.tileLayer('http://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',{
+    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'
+    });
+
+     // Choropleth
+    var layerUrl1 = 'https://jz1894.cartodb.com/api/v2/viz/a4d8b084-efa3-11e5-a33c-0e5db1731f59/viz.json';
+    
+    var map1 = new L.Map('complaintsbyzipMap', { 
+      center: [40.7127,-74.0059],
+      zoom: 10
+    });
+
+    L.tileLayer('http://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',{
+      attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'
+    }).addTo(map1);
+	  
+    cartodb.createLayer(map1, layerUrl1)
+      .addTo(map1)
+      .on('done', function(layer) {
+      }).on('error', function() {
+        //log the error
+    });
+
+
+    // Times Series
+    var layerUrl2 = 'https://jz1894.cartodb.com/api/v2/viz/86bd6dc4-ef21-11e5-a907-0e3ff518bd15/viz.json';
+
+    var map2 = new L.Map('TimeSeriesMap', { 
+      center: [40.7127,-74.0059],
+      zoom: 10
+    });
+
+    L.tileLayer('http://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',{
+      attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'
+    }).addTo(map2);
+
+    cartodb.createLayer(map2, layerUrl2)
+      .addTo(map2)
+      .on('done', function(layer) {
+      }).on('error', function() {
+        //log the error
+    });
+
+	 
+    $(document).ready(function() {
+      $('a[href^="#"]').click(function() {
+          var target = $(this.hash);
+          if (target.length == 0) target = $('a[name="' + this.hash.substr(1) + '"]');
+          if (target.length == 0) target = $('html');
+          $('html, body').animate({ scrollTop: target.offset().top-55 }, 400);
+          return false;
+      });
+    });
+  </script>
+  <!-- <script src="js/NebeTool.js"></script> -->
+ 
+</body>
+</html>

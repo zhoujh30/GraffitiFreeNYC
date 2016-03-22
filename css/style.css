@@ -1,0 +1,35 @@
+h5 {
+  font-style: italic;
+}
+
+p {
+  font-family: sans-serif;
+}
+
+#myFirstDiv {
+  background-color: #cccccc;
+  color: black;
+  margin: 15px;
+  padding: 15px;
+  font-family: sans-serif;
+  border-radius: 20px;
+}
+
+li a {
+  color: yellow;
+}
+
+.notTestClass {
+  margin-left: 20px;
+}
+
+.photo {
+  height: 150px;
+  width: 150px;
+  background-image: url('https://db.tt/as1GV6hw');
+  background-size: 100%;
+}
+
+
+
+
