@@ -13,13 +13,14 @@
   <link href='https://fonts.googleapis.com/css?family=Crimson+Text' rel='stylesheet' type='text/css'>
   <link href='https://fonts.googleapis.com/css?family=Righteous' rel='stylesheet' type='text/css'>
   <link rel="stylesheet" href="http://libs.cartocdn.com/cartodb.js/v3/3.15/themes/css/cartodb.css" />
-
+  <link rel="stylesheet" type="text/css" href="css/dc.css"/>
+  <!-- <link rel="stylesheet" type="text/css" href="css/d3.css"/> -->
 
   <style type="text/css">
 
     #complaintsbyzipMap, #TimeSeriesMap {
-      /*width: 100%;*/
-      height: 500px;
+      width: 820px;
+      height: 600px;
       background-color: gray;
     }
 
@@ -39,12 +40,7 @@
     }
 	  
     .mapButton {
-      /*width: 100px;*/
       height: 50px;
-      /*margin-bottom: 50px;*/
-      /*font-size: 12px;*/
-      /*border-radius: 10px;*/
-      /*margin-right: 10px;*/
     }
 
     .bg {
@@ -59,7 +55,7 @@
 
     .jumbotron {
       height: 690px;
-      padding-top: 190px;
+      padding-top: 268px;
       padding-left: 85px;
       color: white;
       text-shadow: #444 0 5px 5px;
@@ -110,7 +106,9 @@
 
   </style>
 
-
+  <style>.embed-container {position: relative; padding-bottom: 80%; height: 0; max-width: 80%;} .embed-container iframe, .embed-container object, .embed-container iframe{position: absolute; top: 0; left: 0; width: 100%; height: 100%;} small{position: absolute; z-index: 40; bottom: 0; margin-bottom: -15px;}
+  </style>
+  
 </head>
 
 <body>
@@ -124,7 +122,7 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="#top">NYC Graffiti Complaints</a>
+        <a class="navbar-brand" href="#">NYC Graffiti Complaints</a>
       </div>
 
       <!-- Collect the nav links, forms, and other content for toggling -->
@@ -184,8 +182,8 @@
   </div>
 
   <div class="bg"></div>
-  <div class="jumbotron" id='top'>
-    <h1 class='googlefont1'>Welcome!</h1>
+  <div class="jumbotron" id='totop'>
+    <h1 class='googlefont1'>Welcome</h1>
     <p class='googlefont1'>NYC Graffiti Complaints Visualization</p>
     <p><a class="btn btn-primary btn-lg" href="#about" role="button"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> Learn more</a></p>
   </div>
@@ -197,13 +195,41 @@
     <div class="container",class="col-md-9">
       </br>
       <p class="col-md-9">
-        I am Jianhao (Felix) Zhou, a Master of Urban Planning Candidate at NYU Wagner specializing in Environment, Infrastructure and Transportation. I am currently working as an Intern with the Planning, Development, and Transportation Division of New York City
+        The <a href="http://www.nycedc.com/program/graffiti-free-nyc", target="_blank">Graffiti-free NYC Program</a> is the first full-time, street-by-street graffiti removal service initiated by <a href="http://www.nycedc.com", target="_blank">NYCEDC</a> in 1999 in the City of New York. The objectives of Graffiti-Free NYC are to provide no-cost graffiti removal for the City, to create jobs for low-to-moderate income residents, and to enhance overall neighborhood aesthetics.
+        </br>
+        </br>
+        This site takes the advantage of 311 graffiti service requests data from 01/01/2010 to 03/15/2016 from <a href="https://nycopendata.socrata.com/Social-Services/311-Service-Requests-from-2010-to-Present/erm2-nwe9", target="_blank">NYC Open Data</a> and provides a visualization of graffiti complaints.
       </p>
     </div>
   </div>
   </br>
   </br>
   </br>
+
+  <div class="row">
+    <div class="col-md-3" id='complaintsbyzip'>
+      <h1>Charts</h1>
+    </div>
+    <div class="container",class="col-md-9">
+      </br>
+      <div id="quarter-chart">
+          <strong>Quarters</strong>
+          <a class="reset" href="javascript:quarterChart.filterAll();dc.redrawAll();" style="display: none;">reset</a>
+          <div class="clearfix"></div>
+      </div>
+      <div id="day-of-week-chart">
+          <strong>Day of Week</strong>
+          <a class="reset" href="javascript:dayOfWeekChart.filterAll();dc.redrawAll();" style="display: none;">reset</a>
+          <div class="clearfix"></div>
+      </div>
+      <div id="fluctuation-chart">
+          <strong>Days by Fluctuation(%)</strong>
+          <span class="reset" style="display: none;">range: <span class="filter"></span></span>
+          <a class="reset" href="javascript:fluctuationChart.filterAll();dc.redrawAll();" style="display: none;">reset</a>
+          <div class="clearfix"></div>
+      </div>
+    </div>
+  </div>
 
   <div class="row">
     <div class="col-md-3" id='complaintsbyzip'>
@@ -219,20 +245,35 @@
   <div class="row">
     <div class="col-md-3">
       <div class="btn-group-vertical" role="group" aria-label="...">
-          <h5>Change Map Style Here:</h5></br>
+          <!-- <h5>Change Map Style Here:</h5></br>
           <button id="one" type="button" class="btn btn-success mapButton">Default</button></br>
           <button id="two" type="button" class="btn btn-primary mapButton">Thunderforest</button></br>
-          <button id="three" type="button" class="btn btn-danger mapButton">Watercolor</button>
+          <button id="three" type="button" class="btn btn-danger mapButton">Watercolor</button> -->
       </div>
     </div>
     <div class="container",class="col-md-9">
       <div id="complaintsbyzipMap"></div>
-      <!-- <div id="info"></div> -->
     </div>
   </div>
   </br>
   </br>
   </br>
+
+  <div class="row">
+    <div class="col-md-3">
+     <!--  <div class="btn-group-vertical" role="group" aria-label="...">
+          <h5>Change Map Style Here:</h5></br>
+      </div> -->
+    </div>
+    <div class="container",class="col-md-9">
+      <!-- <div class="embed-container"><small><a href="//felixzhou.maps.arcgis.com/apps/Embed/index.html?webmap=f2754acb8f7f4d8b813d89db9f9fae20&amp;extent=-74.5982,40.4033,-73.2963,41.033&amp;zoom=true&amp;scale=true&amp;search=true&amp;searchextent=true&amp;legend=true&amp;basemap_gallery=true&amp;disable_scroll=true&amp;theme=light" style="color:#0000FF;text-align:left" target="_blank">View larger map</a></small><br><iframe width="300" height="300" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" title="GraffitiByZip" src="//felixzhou.maps.arcgis.com/apps/Embed/index.html?webmap=f2754acb8f7f4d8b813d89db9f9fae20&amp;extent=-74.5982,40.4033,-73.2963,41.033&amp;zoom=true&amp;scale=true&amp;search=true&amp;searchextent=true&amp;legend=true&amp;basemap_gallery=true&amp;disable_scroll=true&amp;theme=light"></iframe></div> -->
+      <iframe width="820" height="600" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" title="GraffitiByZip" src="//felixzhou.maps.arcgis.com/apps/Embed/index.html?webmap=f2754acb8f7f4d8b813d89db9f9fae20&amp;extent=-74.5982,40.4033,-73.2963,41.033&amp;zoom=true&amp;scale=true&amp;search=true&amp;searchextent=true&amp;legend=true&amp;basemap_gallery=true&amp;disable_scroll=true&amp;theme=light"></iframe>
+      </br>
+      </br>
+    </div>
+  </div>
+
+        
 
   <div class="row">
     <div class="col-md-3" id='TimeSeries'>
@@ -255,7 +296,7 @@
       <div id="TimeSeriesMap"></div>
     </div>
   </div>
-    
+  
   </br>
   </br>
   </br>
@@ -287,10 +328,15 @@
     </div>
   </nav> -->
 
-  <script src="http://libs.cartocdn.com/cartodb.js/v3/3.15/cartodb.js"></script>
   <script src="js/jquery.js"></script>
-  <script src="js/javascript.js"></script> 
+  <script src="http://libs.cartocdn.com/cartodb.js/v3/3.15/cartodb.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+  <script type="text/javascript" src="js/d3.js"></script>
+  <script type="text/javascript" src="js/crossfilter.js"></script>
+  <script type="text/javascript" src="js/dc.js"></script>
+  <script type="text/javascript" src="js/colorbrewer.js"></script>
+  <script src="js/javascript.js"></script> 
+  <script src="js/charts.js"></script> 
 
   
   <script type="text/javascript">
@@ -309,7 +355,7 @@
     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'
     });
 
-     // Choropleth
+    // Choropleth
     var layerUrl1 = 'https://jz1894.cartodb.com/api/v2/viz/a4d8b084-efa3-11e5-a33c-0e5db1731f59/viz.json';
     
     var map1 = new L.Map('complaintsbyzipMap', { 
@@ -358,8 +404,14 @@
           return false;
       });
     });
+
+
+
+  
+
+
   </script>
-  <!-- <script src="js/NebeTool.js"></script> -->
+  
  
 </body>
 </html>
