@@ -1,302 +1,547 @@
-<!DOCTYPE html>
+<!doctype html>
+
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="theme-color" content="#000000">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <title>BootLeaf</title>
+<head>
+  <meta charset="utf-8">
 
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
-    <!-- <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.6/united/bootstrap.min.css" rel="stylesheet" integrity="sha384-0UBL8wxZ28kqJ8w8N8RUV0odBG5w8D/Y+rb+o7hr2F3dS9twlAE8S7VUtVSRe5cc" crossorigin="anonymous"> -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.css">
-    <link rel="stylesheet" href="https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/MarkerCluster.css">
-    <link rel="stylesheet" href="https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/MarkerCluster.Default.css">
-    <link rel="stylesheet" href="https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-locatecontrol/v0.43.0/L.Control.Locate.css">
-    <link rel="stylesheet" href="assets/leaflet-groupedlayercontrol/leaflet.groupedlayercontrol.css">
-    <link rel="stylesheet" href="assets/css/app.css">
+  <title>NYC Graffiti Complaints</title>
+  <meta name="description" content="eportfolio">
+  <meta name="author" content="Jianhao Zhou">
 
-    <link rel="apple-touch-icon" sizes="76x76" href="assets/img/favicon-76.png">
-    <link rel="apple-touch-icon" sizes="120x120" href="assets/img/favicon-120.png">
-    <link rel="apple-touch-icon" sizes="152x152" href="assets/img/favicon-152.png">
-    <link rel="icon" sizes="196x196" href="assets/img/favicon-196.png">
-    <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico">
-  </head>
+  <link rel="stylesheet" href="css/style.css">
+  <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.6/flatly/bootstrap.min.css" rel="stylesheet" integrity="sha384-XYCjB+hFAjSbgf9yKUgbysEjaVLOXhCgATTEBpCqT1R3jvG5LGRAK5ZIyRbH5vpX" crossorigin="anonymous">
+  <link href='https://fonts.googleapis.com/css?family=Crimson+Text' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Righteous' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="http://libs.cartocdn.com/cartodb.js/v3/3.15/themes/css/cartodb.css" />
+  <link rel="stylesheet" href="https://cdn.rawgit.com/novus/nvd3/v1.8.1/build/nv.d3.css" />
+  <link rel="stylesheet" type="text/css" href="css/dc.css"/>
+  
 
-  <body>
-    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-      <div class="container-fluid">
-        <div class="navbar-header">
-          <div class="navbar-icon-container">
-            <a href="#" class="navbar-icon pull-right visible-xs" id="nav-btn"><i class="fa fa-bars fa-lg white"></i></a>
-            <a href="#" class="navbar-icon pull-right visible-xs" id="sidebar-toggle-btn"><i class="fa fa-search fa-lg white"></i></a>
-          </div>
-          <a class="navbar-brand" href="#">BootLeaf</a>
-        </div>
-        <div class="navbar-collapse collapse">
-          <form class="navbar-form navbar-right" role="search">
-            <div class="form-group has-feedback">
-                <input id="searchbox" type="text" placeholder="Search" class="form-control">
-                <span id="searchicon" class="fa fa-search form-control-feedback"></span>
-            </div>
-          </form>
-          <ul class="nav navbar-nav">
-            <li><a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" id="about-btn"><i class="fa fa-question-circle white"></i>&nbsp;&nbsp;About</a></li>
-            <li class="dropdown">
-              <a id="toolsDrop" href="#" role="button" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-globe white"></i>&nbsp;&nbsp;Tools <b class="caret"></b></a>
-              <ul class="dropdown-menu">
-                <li><a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" id="full-extent-btn"><i class="fa fa-arrows-alt"></i>&nbsp;&nbsp;Zoom To Full Extent</a></li>
-                <li><a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" id="legend-btn"><i class="fa fa-picture-o"></i>&nbsp;&nbsp;Show Legend</a></li>
-                <li class="divider hidden-xs"></li>
-                <li><a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" id="login-btn"><i class="fa fa-user"></i>&nbsp;&nbsp;Login</a></li>
-              </ul>
-            </li>
-            <li class="dropdown">
-                <a class="dropdown-toggle" id="downloadDrop" href="#" role="button" data-toggle="dropdown"><i class="fa fa-cloud-download white"></i>&nbsp;&nbsp;Download <b class="caret"></b></a>
-                <ul class="dropdown-menu">
-                  <li><a href="data/boroughs.geojson" download="boroughs.geojson" target="_blank" data-toggle="collapse" data-target=".navbar-collapse.in"><i class="fa fa-download"></i>&nbsp;&nbsp;Boroughs</a></li>
-                  <li><a href="data/subways.geojson" download="subways.geojson" target="_blank" data-toggle="collapse" data-target=".navbar-collapse.in"><i class="fa fa-download"></i>&nbsp;&nbsp;Subway Lines</a></li>
-                  <li><a href="data/DOITT_THEATER_01_13SEPT2010.geojson" download="theaters.geojson" target="_blank" data-toggle="collapse" data-target=".navbar-collapse.in"><i class="fa fa-download"></i>&nbsp;&nbsp;Theaters</a></li>
-                  <li><a href="data/DOITT_MUSEUM_01_13SEPT2010.geojson" download="museums.geojson" target="_blank" data-toggle="collapse" data-target=".navbar-collapse.in"><i class="fa fa-download"></i>&nbsp;&nbsp;Museums</a></li>
-                </ul>
-            </li>
-            <li class="hidden-xs"><a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" id="list-btn"><i class="fa fa-list white"></i>&nbsp;&nbsp;POI List</a></li>
-          </ul>
-        </div><!--/.navbar-collapse -->
+  <style type="text/css">
+
+    #complaintsbyzipMap, #TimeSeriesMap {
+      width: 820px;
+      height: 600px;
+      background-color: gray;
+    }
+
+   /* #NebeToolMap {
+      width: 100%;
+      height: 500px;
+      background-color: gray;
+    }*/
+
+    .myButton {
+      width: 80px;
+      height: 25px;
+      margin-bottom: 50px;
+      font-size: 12px;
+      border-radius: 10px;
+      margin-right: 10px;
+    }
+	  
+    .mapButton {
+      height: 50px;
+    }
+
+    .emailbutton {
+      height: 48px;
+    }
+
+    .bg {
+      background: url('data/bg.jpg') no-repeat center center;
+      position: fixed;
+      width: 100%;
+      height: 690px; /*same height as jumbotron */
+      top:0;
+      left:0;
+      z-index: -1;
+    }
+
+    .jumbotron {
+      height: 690px;
+      padding-top: 268px;
+      padding-left: 85px;
+      color: white;
+      text-shadow: #444 0 5px 5px;
+      background: transparent;
+    }
+
+    .googlefont1 {
+      font-family: 'Righteous', cursive;
+    }
+
+/*    .googlefont2 {
+      font-family: 'Righteous', cursive;
+    }*/
+
+    .col-md-3 {
+      padding-left: 35px;
+      position: center;
+      font-size: 16;
+    }
+
+    .col-md-12 {
+      padding-left: 35px;
+    }
+
+    #info {
+      background: #FFFFFF;
+      padding: 10px;
+      border-radius: 10px;
+      font: bold, 10px;
+      position: relative;
+      top: -475px;
+      width: auto;
+      display: inline;
+      margin-left: 310px;
+    }
+
+    #courseImg {
+      height: 420px;
+      width: 840px;
+    }
+
+    #linkedin {
+      margin-top: 13px;
+      margin-right: 13px;
+      height: 33px;
+      width: 166px;
+    }
+
+    div.cartodb-timeslider .slider-wrapper {
+    width: 282px;
+    }
+
+    svg {
+        display: block;
+    }
+
+    #picImg {
+      height: 400px;
+      width: 800px;
+    }
+
+    .cartodb-logo {
+    opacity: 0;
+    }
+
+    .notes {
+    margin-left: 20px;      
+    }
+
+    .dc-chart g.row text {
+    fill: black;
+    }
+
+  </style>
+
+  <style>.embed-container {position: relative; padding-bottom: 80%; height: 0; max-width: 80%;} .embed-container iframe, .embed-container object, .embed-container iframe{position: absolute; top: 0; left: 0; width: 100%; height: 100%;} small{position: absolute; z-index: 40; bottom: 0; margin-bottom: -15px;}
+  </style>
+  
+</head>
+
+<body>
+  <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container-fluid">
+      <!-- Brand and toggle get grouped for better mobile display -->
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand mybutton" href="#top">NYC Graffiti Complaints</a>
       </div>
-    </div>
 
-    <div id="container">
-      <div id="sidebar">
-        <div class="sidebar-wrapper">
-          <div class="panel panel-default" id="features">
-            <div class="panel-heading">
-              <h3 class="panel-title">Points of Interest
-              <button type="button" class="btn btn-xs btn-default pull-right" id="sidebar-hide-btn"><i class="fa fa-chevron-left"></i></button></h3>
-            </div>
-            <div class="panel-body">
-              <div class="row">
-                <div class="col-xs-8 col-md-8">
-                  <input type="text" class="form-control search" placeholder="Filter" />
-                </div>
-                <div class="col-xs-4 col-md-4">
-                  <button type="button" class="btn btn-primary pull-right sort" data-sort="feature-name" id="sort-btn"><i class="fa fa-sort"></i>&nbsp;&nbsp;Sort</button>
-                </div>
-              </div>
-            </div>
-            <div class="sidebar-table">
-              <table class="table table-hover" id="feature-list">
-                <thead class="hidden">
-                  <tr>
-                    <th>Icon</th>
-                  <tr>
-                  <tr>
-                    <th>Name</th>
-                  <tr>
-                  <tr>
-                    <th>Chevron</th>
-                  <tr>
-                </thead>
-                <tbody class="list"></tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div id="map"></div>
-    </div>
-    <div id="loading">
-      <div class="loading-indicator">
-        <div class="progress progress-striped active">
-          <div class="progress-bar progress-bar-info progress-bar-full"></div>
-        </div>
-      </div>
-    </div>
-
-    <div class="modal fade" id="aboutModal" tabindex="-1" role="dialog">
-      <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button class="close" type="button" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h4 class="modal-title">Welcome to the BootLeaf template!</h4>
-          </div>
-          <div class="modal-body">
-            <ul class="nav nav-tabs nav-justified" id="aboutTabs">
-              <li class="active"><a href="#about" data-toggle="tab"><i class="fa fa-question-circle"></i>&nbsp;About the project</a></li>
-              <li><a href="#contact" data-toggle="tab"><i class="fa fa-envelope"></i>&nbsp;Contact us</a></li>
-              <li><a href="#disclaimer" data-toggle="tab"><i class="fa fa-exclamation-circle"></i>&nbsp;Disclaimer</a></li>
-              <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-globe"></i>&nbsp;Metadata <b class="caret"></b></a>
-                <ul class="dropdown-menu">
-                  <li><a href="#boroughs-tab" data-toggle="tab">Boroughs</a></li>
-                  <li><a href="#subway-lines-tab" data-toggle="tab">Subway Lines</a></li>
-                  <li><a href="#theaters-tab" data-toggle="tab">Theaters</a></li>
-                  <li><a href="#museums-tab" data-toggle="tab">Museums</a></li>
-                </ul>
-              </li>
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <ul class="nav navbar-nav">
+          <li class="active"><a href="#about">About<span class="sr-only">(current)</span></a></li>
+<!--           <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Projects<span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              <li><a href="#complaintsbyzip">Complaints by Zip</a></li>
+              <li><a href="#">Neighborhood Tool</a></li>
+              <li><a href="#">Something else here</a></li>
+              <li role="separator" class="divider"></li>
+              <li><a href="https://db.tt/yoFH3baF", target="_blank">Neighborhood Planning Tool</a></li>
+              <li role="separator" class="divider"></li>
+              <li><a href="https://github.com/zhoujh30/PUI2015_jzhou/blob/master/Final/PUI2015_final_JianhaoZhou.ipynb", target="_blank">Asthma Factor Study</a></li>
             </ul>
-            <div class="tab-content" id="aboutTabsContent">
-              <div class="tab-pane fade active in" id="about">
-                <p>A simple, responsive template for building web mapping applications with <a href="http://getbootstrap.com/">Bootstrap 3</a>, <a href="http://leafletjs.com/" target="_blank">Leaflet</a>, and <a href="http://twitter.github.io/typeahead.js/" target="_blank">typeahead.js</a>. Open source, MIT licensed, and available on <a href="https://github.com/bmcbride/bootleaf" target="_blank">GitHub</a>.</p>
-                <div class="panel panel-primary">
-                  <div class="panel-heading">Features</div>
-                  <ul class="list-group">
-                    <li class="list-group-item">Fullscreen mobile-friendly map template with responsive navbar and modal placeholders</li>
-                    <li class="list-group-item">jQuery loading of external GeoJSON files</li>
-                    <li class="list-group-item">Logical multiple layer marker clustering via the <a href="https://github.com/Leaflet/Leaflet.markercluster" target="_blank">leaflet marker cluster plugin</a></li>
-                    <li class="list-group-item">Elegant client-side multi-layer feature search with autocomplete using <a href="http://twitter.github.io/typeahead.js/" target="_blank">typeahead.js</a></li>
-                    <li class="list-group-item">Responsive sidebar feature list synced with map bounds, which includes sorting and filtering via <a href="http://listjs.com/" target="_blank">list.js</a></li>
-                    <li class="list-group-item">Marker icons included in grouped layer control via the <a href="https://github.com/ismyrnow/Leaflet.groupedlayercontrol" target="_blank">grouped layer control plugin</a></li>
-                  </ul>
-                </div>
-              </div>
-              <div id="disclaimer" class="tab-pane fade text-danger">
-                <p>The data provided on this site is for informational and planning purposes only.</p>
-                <p>Absolutely no accuracy or completeness guarantee is implied or intended. All information on this map is subject to such variations and corrections as might result from a complete title search and/or accurate field survey.</p>
-              </div>
-              <div class="tab-pane fade" id="contact">
-                <form id="contact-form">
-                  <div class="well well-sm">
-                    <div class="row">
-                      <div class="col-md-4">
-                        <div class="form-group">
-                          <label for="first-name">First Name:</label>
-                          <input type="text" class="form-control" id="first-name">
-                        </div>
-                        <div class="form-group">
-                          <label for="last-name">Last Name:</label>
-                          <input type="text" class="form-control" id="last-email">
-                        </div>
-                        <div class="form-group">
-                          <label for="email">Email:</label>
-                          <input type="text" class="form-control" id="email">
-                        </div>
-                      </div>
-                      <div class="col-md-8">
-                        <label for="message">Message:</label>
-                        <textarea class="form-control" rows="8" id="message"></textarea>
-                      </div>
-                      <div class="col-md-12">
-                        <p>
-                          <button type="submit" class="btn btn-primary pull-right" data-dismiss="modal">Submit</button>
-                        </p>
-                      </div>
+          </li> -->
+          <li><a href="#charts">Charts</a></li>
+          <!-- <li><a href="#complaintsbyzip">Choropleth</a></li> -->
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Choropleth<span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              <li><a href="#byzip">By Zip Code</a></li>
+              <li><a href="#bynta">By Neighborhood Tabulation Area</a></li>
+              <!-- <li><a href="#">Something else here</a></li> -->
+              <!-- <li role="separator" class="divider"></li>
+              <li><a href="https://db.tt/yoFH3baF", target="_blank">Neighborhood Planning Tool</a></li>
+              <li role="separator" class="divider"></li>
+              <li><a href="https://github.com/zhoujh30/PUI2015_jzhou/blob/master/Final/PUI2015_final_JianhaoZhou.ipynb", target="_blank">Asthma Factor Study</a></li> -->
+            </ul>
+          </li>
+          <li><a href="#TimeSeries">Time Series</a></li>
+        </ul>
+       <!--  <form class="navbar-form navbar-left" role="search">
+          <div class="form-group">
+            <input type="text" class="form-control" placeholder="Search">
+          </div>
+          <button type="submit" class="btn btn-default">Submit</button>
+        </form> -->
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="" data-toggle="modal" data-target="#myModal">Contact</a></li>
+        </ul>
+      </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+  </nav>
+
+  <!-- Modal -->
+  <div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Contact</h4>
+        </div>
+        <div class="modal-body">
+            <!-- <form id="contact-form">
+              <div class="well well-sm">
+                <div class="row">
+                  <div class="col-md-4">
+                    <div class="form-group">
+                      <label for="first-name">First Name:</label>
+                      <input type="text" class="form-control" id="first-name">
+                    </div>
+                    <div class="form-group">
+                      <label for="last-name">Last Name:</label>
+                      <input type="text" class="form-control" id="last-email">
+                    </div>
+                    <div class="form-group">
+                      <label for="email">Email:</label>
+                      <input type="text" class="form-control" id="email">
                     </div>
                   </div>
-                </form>
-              </div>
-              <div class="tab-pane fade" id="boroughs-tab">
-                <p>Borough data courtesy of <a href="http://www.nyc.gov/html/dcp/pdf/bytes/nybbwi_metadata.pdf" target="_blank">New York City Department of City Planning</a></p>
-              </div>
-              <div class="tab-pane fade" id="subway-lines-tab">
-                <p><a href="http://spatialityblog.com/2010/07/08/mta-gis-data-update/#datalinks" target="_blank">MTA Subway data</a> courtesy of the <a href="http://www.urbanresearch.org/about/cur-components/cuny-mapping-service" target="_blank">CUNY Mapping Service at the Center for Urban Research</a></p>
-              </div>
-              <div class="tab-pane fade" id="theaters-tab">
-                <p>Theater data courtesy of <a href="https://data.cityofnewyork.us/Recreation/Theaters/kdu2-865w" target="_blank">NYC Department of Information & Telecommunications (DoITT)</a></p>
-              </div>
-              <div class="tab-pane fade" id="museums-tab">
-                <p>Museum data courtesy of <a href="https://data.cityofnewyork.us/Recreation/Museums-and-Galleries/sat5-adpb" target="_blank">NYC Department of Information & Telecommunications (DoITT)</a></p>
-              </div>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-          </div>
-        </div><!-- /.modal-content -->
-      </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
-
-    <div class="modal fade" id="legendModal" tabindex="-1" role="dialog">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h4 class="modal-title">Map Legend</h4>
-          </div>
-          <div class="modal-body">
-            <p>Map Legend goes here...</p>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-          </div>
-        </div><!-- /.modal-content -->
-      </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
-
-    <div class="modal fade" id="loginModal" tabindex="-1" role="dialog">
-      <div class="modal-dialog modal-sm">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h4 class="modal-title">Login</h4>
-          </div>
-          <div class="modal-body">
-            <form id="contact-form">
-              <fieldset>
-                <div class="form-group">
-                  <label for="name">Username:</label>
-                  <input type="text" class="form-control" id="username">
+                  <div class="col-md-8">
+                    <label for="message">Message:</label>
+                    <textarea class="form-control" rows="8" id="message"></textarea>
+                  </div>
+                  <div class="col-md-12">
+                    <p>
+                      <button type="submit" class="btn btn-primary pull-right" data-dismiss="modal">Submit</button>
+                    </p>
+                  </div>
                 </div>
-                <div class="form-group">
-                  <label for="email">Password:</label>
-                  <input type="password" class="form-control" id="password">
-                </div>
-              </fieldset>
-            </form>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-            <button type="submit" class="btn btn-primary" data-dismiss="modal">Login</button>
-          </div>
-        </div><!-- /.modal-content -->
-      </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
+              </div>
+            </form> -->
+          
+          For any inquiries, email me at <a class="btn btn-primary emailbutton" role="button" href="mailto:felix.zhou@nyu.edu">felix.zhou@nyu.edu</a>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
 
-    <div class="modal fade" id="featureModal" tabindex="-1" role="dialog">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button class="close" type="button" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h4 class="modal-title text-primary" id="feature-title"></h4>
-          </div>
-          <div class="modal-body" id="feature-info"></div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-          </div>
-        </div><!-- /.modal-content -->
-      </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
+    </div>
+  </div>
 
-    <div class="modal fade" id="attributionModal" tabindex="-1" role="dialog">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button class="close" type="button" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h4 class="modal-title">
-              Developed by <a href='http://bryanmcbride.com'>bryanmcbride.com</a>
-            </h4>
-          </div>
-          <div class="modal-body">
-            <div id="attribution"></div>
-          </div>
-        </div><!-- /.modal-content -->
-      </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
+  <div class="bg"></div>
+  <div class="jumbotron" id='top'>
+    <h1 class='googlefont1'>Welcome</h1>
+    <p class='googlefont1'>NYC Graffiti Complaints Visualization</p>
+    <p><a class="btn btn-primary btn-lg" href="#about" role="button"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> Learn more</a></p>
+  </div>
 
-    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.10.5/typeahead.bundle.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/3.0.3/handlebars.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/list.js/1.1.1/list.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.js"></script>
-    <script src="https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/leaflet.markercluster.js"></script>
-    <script src="https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-locatecontrol/v0.43.0/L.Control.Locate.min.js"></script>
-    <script src="assets/leaflet-groupedlayercontrol/leaflet.groupedlayercontrol.js"></script>
-    <script src="assets/js/app.js"></script>
-  </body>
+  <div class="row">
+    <div class="col-md-3" id='about'>
+      <h1>About</h1>
+    </div>
+    <div class="container",class="col-md-9">
+      </br>
+      <p class="col-md-9">
+        The <a href="http://www.nycedc.com/program/graffiti-free-nyc", target="_blank">Graffiti-free NYC Program</a> is the first full-time, street-by-street graffiti removal service initiated by <a href="http://www.nycedc.com", target="_blank">NYCEDC</a> in 1999 in the City of New York. The objectives of Graffiti-Free NYC are to provide no-cost graffiti removal for the City, to create jobs for low-to-moderate income residents, and to enhance overall neighborhood aesthetics.
+        </br>
+        </br>
+        <img src="data/pic.jpg" class="img-rounded" id='picImg'>
+        </br>
+        </br>
+        This site takes the advantage of 311 graffiti service requests data from 01/01/2010 to 12/31/2015 from <a href="https://nycopendata.socrata.com/Social-Services/311-Service-Requests-from-2010-to-Present/erm2-nwe9", target="_blank">NYC Open Data</a> and provides a visualization of graffiti complaints.
+      </p>
+    </div>
+  </div>
+  </br>
+  </br>
+
+  <div class="row">
+    <div class="col-md-3" id='charts'>
+      <h1>Charts</h1>
+    </div>
+    <div class="container",class="col-md-9">
+      </br>
+      <div class="container",class="col-md-9">
+      <p class="col-md-9">Let's take a look at the total number of graffiti complaints by quarters, by day of week, by boroughs, by land uses, and by months. </br></br>There are slightly more complaints in quarter 2 (April, May, and June) than other three quarters. You can have a better sense of the yearly pattern with the monthly chart below. Meanwhile, more complaints arise on weekdays and in mixed use areas. Brooklyn outperforms the other four boroughs while Staten Island has the least complaints.</br></br>For number of complaints by quarters, boroughs, and land uses, we might be more confident to conclude that larger number of complaints means more graffiti created. For complaints by day of week, however, it may also result from people's tendency to complain on weekdays as opposed to weekends (if for properties near their workplace).</br></br>
+      Explore and interact with the charts!</p> 
+    </div>
+  </div>
+    
+  <div class="row">
+    <div class="col-md-3">
+      </br></br></br></br><h5 class='notes'>(Click to filter)</h5>
+    </div>
+    <div class="col-md-9">
+      <div id="quarter-chart">
+        </br></br>
+        <strong>Quarters</strong>
+        <a class="reset" href="javascript:quarterChart.filterAll();dc.redrawAll();" style="display: none;">reset</a>
+        <div class="clearfix"></div>
+      </div>
+
+      <div id="day-of-week-chart">
+          </br></br>
+          <strong>Day of Week</strong>
+          <a class="reset" href="javascript:dayOfWeekChart.filterAll();dc.redrawAll();" style="display: none;">reset</a>
+          <div class="clearfix"></div>
+      </div>
+
+      
+      <div id="borough-chart">
+      </br></br>
+        <strong>Boroughs</strong>
+        <a class="reset" href="javascript:boroughChart.filterAll();dc.redrawAll();" style="display: none;">reset</a>
+        <div class="clearfix"></div>
+      </div>
+
+      <div id="use-chart">
+      </br></br>
+          <strong>Land Uses</strong>
+          <a class="reset" href="javascript:useChart.filterAll();dc.redrawAll();" style="display: none;">reset</a>
+          <div class="clearfix"></div>
+      </div>
+      
+    </div>
+  </div>
+
+  <div class="row">
+      <div class="col-md-3" id='charts'>
+        </br></br></br></br><h5 class='notes'>(Select a time range to zoom in)</h5>
+      </div> 
+      <div id="monthly-volume-chart", class="col-md-9"></br></br>
+        <strong>Monthly Number of Graffiti Complaints</strong>
+      </div>
+  </div>
+  </br></br>
+
+  <div class="row">
+    <div class="col-md-3" id='byzip'>
+      <h1>Choropleth</h1>
+    </div>
+    <div class="container",class="col-md-9">
+      </br>
+      <p class="col-md-9">The Best for NYC Challenge is a free, online tool to help you compare your business's impact on NYC workers, communities, and the environment against 8,000+ businesses and provides free resources to improve. Here is a map of all participant companies.</p>
+    </div>
+  </div>
+  </br>
+
+  <div class="row">
+    <div class="col-md-3">
+      <div class="btn-group-vertical" role="group" aria-label="...">
+          <h5 class='notes'>By Zip Code </br></br>(Please hover over a zip code)</h5></br>
+       <!--    <button id="one" type="button" class="btn btn-success mapButton">Default</button></br>
+          <button id="two" type="button" class="btn btn-primary mapButton">Thunderforest</button></br>
+          <button id="three" type="button" class="btn btn-danger mapButton">Watercolor</button> -->
+      </div>
+    </div>
+    <div class="container",class="col-md-9">
+      <div id="complaintsbyzipMap"></div>
+    </div>
+  </div>
+  </br>
+  </br>
+  </br>
+
+
+  <div class="row">
+    <div class="col-md-3" id='bynta'>
+      <h1>Choropleth</h1>
+    </div>
+    <div class="container",class="col-md-9">
+      </br>
+      <p class="col-md-9">The Best for NYC Challenge is a free, online tool to help you compare your business's impact on NYC workers, communities, and the environment against 8,000+ businesses and provides free resources to improve. Here is a map of all participant companies.</p>
+    </div>
+  </div>
+  </br>
+  <div class="row">
+    <div class="col-md-3">
+      <div class="btn-group-vertical" role="group" aria-label="...">
+          <h5 class='notes'>By Neighborhood Tabulation Area</br></br>(Please click a neighborhood)</h5></br>
+      </div>
+    </div>
+    <div class="container",class="col-md-9">
+      <!-- <div class="embed-container"><small><a href="//felixzhou.maps.arcgis.com/apps/Embed/index.html?webmap=f2754acb8f7f4d8b813d89db9f9fae20&amp;extent=-74.5982,40.4033,-73.2963,41.033&amp;zoom=true&amp;scale=true&amp;search=true&amp;searchextent=true&amp;legend=true&amp;basemap_gallery=true&amp;disable_scroll=true&amp;theme=light" style="color:#0000FF;text-align:left" target="_blank">View larger map</a></small><br><iframe width="300" height="300" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" title="GraffitiByZip" src="//felixzhou.maps.arcgis.com/apps/Embed/index.html?webmap=f2754acb8f7f4d8b813d89db9f9fae20&amp;extent=-74.5982,40.4033,-73.2963,41.033&amp;zoom=true&amp;scale=true&amp;search=true&amp;searchextent=true&amp;legend=true&amp;basemap_gallery=true&amp;disable_scroll=true&amp;theme=light"></iframe></div> -->
+      <iframe width="820" height="600" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" title="GraffitiByZip" src="//felixzhou.maps.arcgis.com/apps/Embed/index.html?webmap=f2754acb8f7f4d8b813d89db9f9fae20&amp;extent=-74.5982,40.4033,-73.2963,41.033&amp;zoom=true&amp;scale=true&amp;search=true&amp;searchextent=true&amp;legend=true&amp;basemap_gallery=true&amp;disable_scroll=true&amp;theme=light"></iframe>
+      </br>
+      </br>
+    </div>
+  </div>
+  </br></br>
+        
+
+  <div class="row">
+    <div class="col-md-3" id='TimeSeries'>
+      <h1>Time Series</h1>
+    </div>
+    <div class="container",class="col-md-9">
+      </br>
+      <p class="col-md-9">The Best for NYC Challenge is a free, online tool to help you compare your business's impact on NYC workers, communities, and the environment against 8,000+ businesses and provides free resources to improve. Here is a map of all participant companies.</p>
+    </div>
+  </div>
+  </br>
+
+  <div class="row">
+    <div class="col-md-3">
+      <div class="btn-group-vertical" role="group" aria-label="...">
+          <h5 class='notes'>(Control using the time slider)</h5></br>
+      </div>
+    </div>
+    <div class="container",class="col-md-9">
+      <div id="TimeSeriesMap"></div>
+    </div>
+  </div>
+  
+  </br>
+  </br>
+  </br>
+  </br>
+  </br>
+
+<!--   <nav class="navbar navbar-default navbar-fixed-bottom">
+    <div class="container-fluid"> -->
+        <!-- Brand and toggle get grouped for better mobile display -->
+<!--         <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#top">Return to top</a>
+        </div>
+        
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <ul class="nav navbar-nav navbar-right">
+ -->            <!-- <li class="active"><a href="#about">About<span class="sr-only">(current)</span></a></li> -->
+           <!--  <a href="https://www.linkedin.com/pub/jianhao-felix-zhou/35/50b/a8"  target="_blank">
+              <img id='linkedin' src="https://static.licdn.com/scds/common/u/img/webpromo/btn_viewmy_160x33.png" border="0" alt="View Jianhao (Felix) Zhou's profile on LinkedIn">
+            </a>
+            <li><a href="mailto:felix.zhou@nyu.edu">felix.zhou@nyu.edu</a></li>
+          </ul>
+        </div>
+    </div>
+  </nav> -->
+
+  <script src="js/jquery.js"></script>
+  <script src="http://libs.cartocdn.com/cartodb.js/v3/3.15/cartodb.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+  <script type="text/javascript" src="js/d3.js"></script>
+  <script src="https://cdn.rawgit.com/novus/nvd3/v1.8.1/build/nv.d3.js"></script>
+  <script type="text/javascript" src="js/crossfilter.js"></script>
+  <script type="text/javascript" src="js/dc.js"></script>
+  <script type="text/javascript" src="js/colorbrewer.js"></script>
+  <script src="js/javascript.js"></script> 
+  <!-- <script src="js/charts1.js"></script>  -->
+  <script src="js/charts.js"></script> 
+
+  
+  <script type="text/javascript">
+
+    var jumboHeight = $('.jumbotron').outerHeight();
+    function parallax(){
+        var scrolled = $(window).scrollTop();
+        $('.bg').css('height', (jumboHeight-scrolled) + 'px');
+    }
+
+    $(window).scroll(function(e){
+        parallax();
+    });
+  
+    var layer1 = L.tileLayer('http://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',{
+    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'
+    });
+
+    // Choropleth
+    var layerUrl1 = 'https://jz1894.cartodb.com/api/v2/viz/a4d8b084-efa3-11e5-a33c-0e5db1731f59/viz.json';
+    
+    var map1 = new L.Map('complaintsbyzipMap', { 
+      center: [40.7127,-74.0059],
+      zoom: 10
+    });
+
+    L.tileLayer('http://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',{
+      attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'
+    }).addTo(map1);
+	  
+    cartodb.createLayer(map1, layerUrl1)
+      .addTo(map1)
+      .on('done', function(layer) {
+      }).on('error', function() {
+        //log the error
+    });
+
+
+    // Times Series
+    var layerUrl2 = 'https://jz1894.cartodb.com/api/v2/viz/86bd6dc4-ef21-11e5-a907-0e3ff518bd15/viz.json';
+
+    var map2 = new L.Map('TimeSeriesMap', { 
+      center: [40.7127,-74.0059],
+      zoom: 10
+    });
+
+    L.tileLayer('http://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',{
+      attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'
+    }).addTo(map2);
+
+    cartodb.createLayer(map2, layerUrl2)
+      .addTo(map2)
+      .on('done', function(layer) {
+      }).on('error', function() {
+        //log the error
+    });
+
+	 
+
+    function scroll_if_anchor(href) {
+        href = typeof(href) == "string" ? href : $(this).attr("href");      
+        // You could easily calculate this dynamically if you prefer
+        var fromTop = 50;
+        // If our Href points to a valid, non-empty anchor, and is on the same page (e.g. #foo)
+        // Legacy jQuery and IE7 may have issues: http://stackoverflow.com/q/1593174
+        if(href.indexOf("#") == 0) {
+            var $target = $(href);
+            // Older browser without pushState might flicker here, as they momentarily
+            // jump to the wrong position (IE < 10)
+            if($target.length) {
+                $('html, body').animate({ scrollTop: $target.offset().top - fromTop });
+                if(history && "pushState" in history) {
+                    history.pushState({}, document.title, window.location.pathname + href);
+                    return false;
+                }
+            }
+        }
+    }    
+    // When our page loads, check to see if it contains and anchor
+    scroll_if_anchor(window.location.hash);
+    // Intercept all anchor clicks
+    $("body").on("click", "a", scroll_if_anchor);
+
+
+  </script>
+  
+ 
+</body>
 </html>
