@@ -81,6 +81,10 @@
       font-size: 16;
     }
 
+    .col-md-12 {
+      padding-left: 35px;
+    }
+
     #info {
       background: #FFFFFF;
       padding: 10px;
@@ -113,13 +117,6 @@
         display: block;
     }
 
-    html, body, #chart1, svg {
-        margin: 0px;
-        padding: 0px;
-        width: 100%;
-        height: 100%;
-    }
-
     #picImg {
       height: 400px;
       width: 800px;
@@ -131,6 +128,10 @@
 
     .notes {
     margin-left: 20px;      
+    }
+
+    .dc-chart g.row text {
+    fill: black;
     }
 
   </style>
@@ -284,8 +285,7 @@
     <div class="container",class="col-md-9">
       </br>
       <div class="container",class="col-md-9">
-      <p class="col-md-9">Let's take a look at the total number of graffiti complaints by quarters, boroughs, by day of week, and by months. There are more complaints in quarter 2 (April, May, and June) but less ones in other three quarters. You can have a better sense of the yearly pattern with the monthly chart below. Brooklyn outperforms the other four boroughs while Staten Island has the least number. Meanwhile, there are more complaints on weekdays than on weekends.</br></br>
-      For number of complaints by quarters and boroughs, we might be more confident to conclude that larger number of complaints means more graffiti created during that period and in that area. For complaints by day of week, however, it may also result from people's tendency to complain during weekdays rather than weekends (like for properties near their workplace).</br></br>
+      <p class="col-md-9">Let's take a look at the total number of graffiti complaints by quarters, by day of week, by boroughs, by land uses, and by months. </br></br>There are slightly more complaints in quarter 2 (April, May, and June) than other three quarters. You can have a better sense of the yearly pattern with the monthly chart below. Meanwhile, more complaints arise on weekdays and in mixed use areas. Brooklyn outperforms the other four boroughs while Staten Island has the least complaints.</br></br>For number of complaints by quarters, boroughs, and land uses, we might be more confident to conclude that larger number of complaints means more graffiti created. For complaints by day of week, however, it may also result from people's tendency to complain on weekdays as opposed to weekends (if for properties near their workplace).</br></br>
       Explore and interact with the charts!</p> 
     </div>
   </div>
@@ -302,19 +302,28 @@
         <div class="clearfix"></div>
       </div>
 
-      </br></br>
-      <div id="borough-chart">
-        <strong>Boroughs</strong>
-        <a class="reset" href="javascript:boroughChart.filterAll();dc.redrawAll();" style="display: none;">reset</a>
-        <div class="clearfix"></div>
-      </div>
-
       <div id="day-of-week-chart">
+          </br></br>
           <strong>Day of Week</strong>
           <a class="reset" href="javascript:dayOfWeekChart.filterAll();dc.redrawAll();" style="display: none;">reset</a>
           <div class="clearfix"></div>
       </div>
 
+      
+      <div id="borough-chart">
+      </br></br>
+        <strong>Boroughs</strong>
+        <a class="reset" href="javascript:boroughChart.filterAll();dc.redrawAll();" style="display: none;">reset</a>
+        <div class="clearfix"></div>
+      </div>
+
+      <div id="use-chart">
+      </br></br>
+          <strong>Land Uses</strong>
+          <a class="reset" href="javascript:useChart.filterAll();dc.redrawAll();" style="display: none;">reset</a>
+          <div class="clearfix"></div>
+      </div>
+      
     </div>
   </div>
 
@@ -322,10 +331,11 @@
       <div class="col-md-3" id='charts'>
         </br></br></br></br><h5 class='notes'>(Select a time range to zoom in)</h5>
       </div> 
-      <div id="monthly-volume-chart", class="col-md-9">
+      <div id="monthly-volume-chart", class="col-md-9"></br></br>
         <strong>Monthly Number of Graffiti Complaints</strong>
       </div>
   </div>
+  </br></br>
 
   <div class="row">
     <div class="col-md-3" id='byzip'>
@@ -379,7 +389,7 @@
       </br>
     </div>
   </div>
-
+  </br></br>
         
 
   <div class="row">

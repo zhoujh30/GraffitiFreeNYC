@@ -9,12 +9,13 @@
 // Create chart objects associated with the container elements identified by the css selector.
 // Note: It is often a good idea to have these objects accessible at the global scope so that they can be modified or
 // filtered by other page controls.
-var boroughChart = dc.pieChart('#borough-chart');
+var boroughChart = dc.rowChart('#borough-chart');
 // var fluctuationChart = dc.barChart('#fluctuation-chart');
-var quarterChart = dc.pieChart('#quarter-chart');
+var quarterChart = dc.rowChart('#quarter-chart');
 var dayOfWeekChart = dc.rowChart('#day-of-week-chart');
 // var moveChart = dc.lineChart('#monthly-move-chart');
 var volumeChart = dc.barChart('#monthly-volume-chart');
+var useChart = dc.rowChart('#use-chart');
 // var yearlyBubbleChart = dc.bubbleChart('#yearly-bubble-chart');
 // var nasdaqCount = dc.dataCount('.dc-data-count');
 // var nasdaqTable = dc.dataTable('.dc-data-table');
@@ -59,7 +60,7 @@ var volumeChart = dc.barChart('#monthly-volume-chart');
 //d3.json('data.json', function(data) {...};
 //jQuery.getJson('data.json', function(data){...});
 //```
-d3.csv('../data/graffitibydayboro.csv', function (data) {
+d3.csv('../data/graffitibyboro_date_type.csv', function (data) {
     // Since its a csv file we need to format the data a bit.
     var dateFormat = d3.time.format('%Y-%m-%d');
     var numberFormat = d3.format('.2f');
@@ -156,6 +157,25 @@ d3.csv('../data/graffitibydayboro.csv', function (data) {
     // );
 
     // Create categorical dimension
+    var use = ndx.dimension(function (d) {
+        if (d.location_type.includes('Comercial')){
+            return 'Commercial';
+        } else if (d.location_type.includes('Residential')) {
+            return 'Residential';
+        } else if (d.location_type == 'Mixed Use') {
+            return 'Mixed Use';
+        } else if (d.location_type.length>0) {
+            return 'Street/Sidewalk';
+        } else {
+            return 'N/A';
+        }
+    });
+    // Produce counts records in the dimension
+    var useGroup = use.group().reduceSum(function (d) {
+        return d.number;
+    });
+
+       // Create categorical dimension
     var borough = ndx.dimension(function (d) {
         if (d.borough == 'MANHATTAN') {
             return 'MN';
@@ -173,6 +193,7 @@ d3.csv('../data/graffitibydayboro.csv', function (data) {
     var boroughGroup = borough.group().reduceSum(function (d) {
         return d.number;
     });
+
 
     // Determine a histogram of percent changes
     // var fluctuation = ndx.dimension(function (d) {
@@ -349,13 +370,13 @@ d3.csv('../data/graffitibydayboro.csv', function (data) {
         .colorAccessor(function(d, i){return d.value;})
         */;
 
-    quarterChart /* dc.pieChart('#quarter-chart', 'chartGroup') */
-        .width(180)
-        .height(180)
-        .radius(80)
-        .innerRadius(30)
-        .dimension(quarter)
-        .group(quarterGroup);
+    // quarterChart /* dc.pieChart('#quarter-chart', 'chartGroup') */
+    //     .width(180)
+    //     .height(180)
+    //     .radius(80)
+    //     .innerRadius(30)
+    //     .dimension(quarter)
+    //     .group(quarterGroup);
         // .colors(['#bae4b3','#74c476','#31a354','#006d2c']);
         // .colorDomain(function (d){[Math.min(d.number), Math.max(d.number)]})
         // .colorAccessor(function(d, i){return d.value;});
@@ -371,13 +392,13 @@ d3.csv('../data/graffitibydayboro.csv', function (data) {
         // });
 
 
-    boroughChart /* dc.pieChart('#quarter-chart', 'chartGroup') */
-        .width(180)
-        .height(180)
-        .radius(80)
-        .innerRadius(30)
-        .dimension(borough)
-        .group(boroughGroup)
+    // boroughChart /* dc.pieChart('#quarter-chart', 'chartGroup') */
+    //     .width(180)
+    //     .height(180)
+    //     .radius(80)
+    //     .innerRadius(30)
+    //     .dimension(borough)
+    //     .group(boroughGroup)
         // .colors(['#e41a1c','#377eb8','#4daf4a','#984ea3','#ff7f00'])
         // .colorDomain(function (d){[Math.min(d.number), Math.max(d.number)]})
         // .colorAccessor(function(d, i){return d.value;});
@@ -402,11 +423,11 @@ d3.csv('../data/graffitibydayboro.csv', function (data) {
     dayOfWeekChart /* dc.rowChart('#day-of-week-chart', 'chartGroup') */
         .width(180)
         .height(180)
-        .margins({top: 20, left: 0, right: 0, bottom: 0})
+        .margins({top: 20, left: 0, right: 20, bottom: 40})
         .group(dayOfWeekGroup)
         .dimension(dayOfWeek)
         // Assign colors to each value in the x scale domain
-        .ordinalColors(['#e41a1c','#377eb8','#4daf4a','#984ea3','#ff7f00','#000000','#a65628'])
+        .ordinalColors(['#a6cee3','#1f78b4','#b2df8a','#33a02c','#fb9a99','#e31a1c','#fdbf6f'])
         .label(function (d) {
             return d.key.split('.')[1];
         })
@@ -417,6 +438,60 @@ d3.csv('../data/graffitibydayboro.csv', function (data) {
         .elasticX(true)
         .xAxis().ticks(4);
 
+    quarterChart /* dc.rowChart('#day-of-week-chart', 'chartGroup') */
+        .width(180)
+        .height(180)
+        .margins({top: 20, left: 0, right: 20, bottom: 40})
+        .group(quarterGroup)
+        .dimension(quarter)
+        // Assign colors to each value in the x scale domain
+        .ordinalColors(['#8dd3c7','#ffffb3','#bebada','#fb8072'])
+        // .label(function (d) {
+        //     return d.key.split('.')[1];
+        // })
+        // Title sets the row text
+        .title(function (d) {
+            return d.value;
+        })
+        .elasticX(true)
+        .xAxis().ticks(4);
+
+    boroughChart /* dc.rowChart('#day-of-week-chart', 'chartGroup') */
+        .width(180)
+        .height(180)
+        .margins({top: 20, left: 0, right: 20, bottom: 40})
+        .group(boroughGroup)
+        .dimension(borough)
+        // Assign colors to each value in the x scale domain
+        .ordinalColors(['#1b9e77','#d95f02','#7570b3','#e7298a','#66a61e'])
+        // .label(function (d) {
+        //     return d.key;
+        // })
+        // Title sets the row text
+        .title(function (d) {
+            return d.value;
+        })
+        .elasticX(true)
+        .xAxis().ticks(4);
+
+
+    useChart /* dc.rowChart('#day-of-week-chart', 'chartGroup') */
+        .width(180)
+        .height(180)
+        .margins({top: 20, left: 0, right: 20, bottom: 40})
+        .group(useGroup)
+        .dimension(use)
+        // Assign colors to each value in the x scale domain
+        .ordinalColors(['#fbb4ae','#fdc086','#80b1d3','#ffff99','#beaed4'])
+        // .label(function (d) {
+        //     return d.key;
+        // })
+        // Title sets the row text
+        .title(function (d) {
+            return d.value;
+        })
+        .elasticX(true)
+        .xAxis().ticks(4);
     //#### Bar Chart
 
     // Create a bar chart and use the given css selector as anchor. You can also specify
@@ -504,7 +579,7 @@ d3.csv('../data/graffitibydayboro.csv', function (data) {
     // will always match the zoom of the area chart.
     volumeChart.width(720) /* dc.barChart('#monthly-volume-chart', 'chartGroup'); */
         .height(200)
-        .margins({top: 20, right: 0, bottom: 10, left: 50})
+        .margins({top: 20, right: 20, bottom: 30, left: 50})
         .dimension(moveMonths)
         .group(volumeByMonthGroup)
         .centerBar(true)
