@@ -9,7 +9,7 @@
 // Create chart objects associated with the container elements identified by the css selector.
 // Note: It is often a good idea to have these objects accessible at the global scope so that they can be modified or
 // filtered by other page controls.
-// var gainOrLossChart = dc.pieChart('#gain-loss-chart');
+var boroughChart = dc.pieChart('#borough-chart');
 // var fluctuationChart = dc.barChart('#fluctuation-chart');
 var quarterChart = dc.pieChart('#quarter-chart');
 var dayOfWeekChart = dc.rowChart('#day-of-week-chart');
@@ -59,7 +59,7 @@ var volumeChart = dc.barChart('#monthly-volume-chart');
 //d3.json('data.json', function(data) {...};
 //jQuery.getJson('data.json', function(data){...});
 //```
-d3.csv('../data/graffitibyday.csv', function (data) {
+d3.csv('../data/graffitibydayboro.csv', function (data) {
     // Since its a csv file we need to format the data a bit.
     var dateFormat = d3.time.format('%Y-%m-%d');
     var numberFormat = d3.format('.2f');
@@ -76,6 +76,7 @@ d3.csv('../data/graffitibyday.csv', function (data) {
     //See the [crossfilter API](https://github.com/square/crossfilter/wiki/API-Reference) for reference.
     var ndx = crossfilter(data);
     var all = ndx.groupAll();
+    console.log(all)
 
     // Dimension by year
     var yearlyDimension = ndx.dimension(function (d) {
@@ -155,11 +156,23 @@ d3.csv('../data/graffitibyday.csv', function (data) {
     // );
 
     // Create categorical dimension
-    // var gainOrLoss = ndx.dimension(function (d) {
-    //     return d.open > d.close ? 'Loss' : 'Gain';
-    // });
+    var borough = ndx.dimension(function (d) {
+        if (d.borough == 'MANHATTAN') {
+            return 'MN';
+        } else if (d.borough == 'BROOKLYN') {
+            return 'BK';
+        } else if (d.borough == 'QUEENS') {
+            return 'QN';
+        } else if (d.borough == 'BRONX') {
+            return 'BX';
+        } else {
+            return 'SI';
+        }
+    });
     // Produce counts records in the dimension
-    // var gainOrLossGroup = gainOrLoss.group();
+    var boroughGroup = borough.group().reduceSum(function (d) {
+        return d.number;
+    });
 
     // Determine a histogram of percent changes
     // var fluctuation = ndx.dimension(function (d) {
@@ -190,7 +203,9 @@ d3.csv('../data/graffitibyday.csv', function (data) {
         var name = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
         return day + '.' + name[day];
     });
-    var dayOfWeekGroup = dayOfWeek.group();
+    var dayOfWeekGroup = dayOfWeek.group().reduceSum(function (d) {
+        return d.number;
+    });
 
     //### Define Chart Attributes
     // Define chart attributes using fluent methods. See the
@@ -341,6 +356,41 @@ d3.csv('../data/graffitibyday.csv', function (data) {
         .innerRadius(30)
         .dimension(quarter)
         .group(quarterGroup);
+        // .colors(['#bae4b3','#74c476','#31a354','#006d2c']);
+        // .colorDomain(function (d){[Math.min(d.number), Math.max(d.number)]})
+        // .colorAccessor(function(d, i){return d.value;});
+        // .label(function (d) {
+        //     if (quarterChart.hasFilter() && !quarterChart.hasFilter(d.key)) {
+        //         return d.key + '(0%)';
+        //     }
+        //     var label = d.key;
+        //     if (all.value()) {
+        //         label += '(' + Math.floor(d.value / all.value() * 100 ) + '%)';
+        //     }
+        //     return label;
+        // });
+
+
+    boroughChart /* dc.pieChart('#quarter-chart', 'chartGroup') */
+        .width(180)
+        .height(180)
+        .radius(80)
+        .innerRadius(30)
+        .dimension(borough)
+        .group(boroughGroup)
+        // .colors(['#e41a1c','#377eb8','#4daf4a','#984ea3','#ff7f00'])
+        // .colorDomain(function (d){[Math.min(d.number), Math.max(d.number)]})
+        // .colorAccessor(function(d, i){return d.value;});
+        // .label(function (d) {
+        //     if (quarterChart.hasFilter() && !quarterChart.hasFilter(d.key)) {
+        //         return d.key + '(0%)';
+        //     }
+        //     var label = d.key;
+        //     if (all.value()) {
+        //         label += '(' + Math.floor(d.value / all.value() * 100 ) + '%)';
+        //     }
+        //     return label;
+        // });
 
     //#### Row Chart
 
@@ -352,11 +402,11 @@ d3.csv('../data/graffitibyday.csv', function (data) {
     dayOfWeekChart /* dc.rowChart('#day-of-week-chart', 'chartGroup') */
         .width(180)
         .height(180)
-        .margins({top: 20, left: 10, right: 10, bottom: 0})
+        .margins({top: 20, left: 0, right: 0, bottom: 0})
         .group(dayOfWeekGroup)
         .dimension(dayOfWeek)
         // Assign colors to each value in the x scale domain
-        .ordinalColors(['#3182bd', '#6baed6', '#9ecae1', '#c6dbef', '#dadaeb'])
+        .ordinalColors(['#e41a1c','#377eb8','#4daf4a','#984ea3','#ff7f00','#000000','#a65628'])
         .label(function (d) {
             return d.key.split('.')[1];
         })
@@ -459,11 +509,13 @@ d3.csv('../data/graffitibyday.csv', function (data) {
         .group(volumeByMonthGroup)
         .centerBar(true)
         .gap(1)
-        .x(d3.time.scale().domain([new Date(2010, 0, 1), new Date(2016, 2, 20)]))
+        .x(d3.time.scale().domain([new Date(2009, 10, 1), new Date(2016, 1, 1)]))
         .round(d3.time.month.round)
         .alwaysUseRounding(true)
-        // .xUnits(d3.time.months)
-        .xUnits(d3.time.months);
+        .xUnits(d3.time.months)
+        .elasticY(true)
+        .renderHorizontalGridLines(true);
+
 
     //#### Data Count
 

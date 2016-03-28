@@ -270,7 +270,7 @@
         <img src="data/pic.jpg" class="img-rounded" id='picImg'>
         </br>
         </br>
-        This site takes the advantage of 311 graffiti service requests data from 01/01/2010 to 03/20/2016 from <a href="https://nycopendata.socrata.com/Social-Services/311-Service-Requests-from-2010-to-Present/erm2-nwe9", target="_blank">NYC Open Data</a> and provides a visualization of graffiti complaints.
+        This site takes the advantage of 311 graffiti service requests data from 01/01/2010 to 12/31/2015 from <a href="https://nycopendata.socrata.com/Social-Services/311-Service-Requests-from-2010-to-Present/erm2-nwe9", target="_blank">NYC Open Data</a> and provides a visualization of graffiti complaints.
       </p>
     </div>
   </div>
@@ -284,39 +284,45 @@
     <div class="container",class="col-md-9">
       </br>
       <div class="container",class="col-md-9">
-      </br>
-      <p class="col-md-9">The Best for NYC Challenge is a free, online tool to help you compare your business's impact on NYC workers, communities, and the environment against 8,000+ businesses and provides free resources to improve. Here is a map of all participant companies.</p>
+      <p class="col-md-9">Let's take a look at the total number of graffiti complaints by quarters, boroughs, by day of week, and by months. There are more complaints in quarter 2 (April, May, and June) but less ones in other three quarters. You can have a better sense of the yearly pattern with the monthly chart below. Brooklyn outperforms the other four boroughs while Staten Island has the least number. Meanwhile, there are more complaints on weekdays than on weekends.</br></br>
+      For number of complaints by quarters and boroughs, we might be more confident to conclude that larger number of complaints means more graffiti created during that period and in that area. For complaints by day of week, however, it may also result from people's tendency to complain during weekdays rather than weekends (like for properties near their workplace).</br></br>
+      Explore and interact with the charts!</p> 
     </div>
   </div>
     
   <div class="row">
     <div class="col-md-3">
-      </br></br></br></br><h5 class='notes'>Click to filter</h5>
+      </br></br></br></br><h5 class='notes'>(Click to filter)</h5>
     </div>
-    <div class="container",class="col-md-9">
+    <div class="col-md-9">
       <div id="quarter-chart">
         </br></br>
         <strong>Quarters</strong>
         <a class="reset" href="javascript:quarterChart.filterAll();dc.redrawAll();" style="display: none;">reset</a>
         <div class="clearfix"></div>
       </div>
+
       </br></br>
+      <div id="borough-chart">
+        <strong>Boroughs</strong>
+        <a class="reset" href="javascript:boroughChart.filterAll();dc.redrawAll();" style="display: none;">reset</a>
+        <div class="clearfix"></div>
+      </div>
+
       <div id="day-of-week-chart">
           <strong>Day of Week</strong>
           <a class="reset" href="javascript:dayOfWeekChart.filterAll();dc.redrawAll();" style="display: none;">reset</a>
           <div class="clearfix"></div>
       </div>
-      <!-- <div id="chart1">
-        <svg></svg>
-      </div>      -->
+
     </div>
   </div>
 
   <div class="row">
       <div class="col-md-3" id='charts'>
-        </br></br></br></br><h5 class='notes'>Select a time range to zoom in</h5>
+        </br></br></br></br><h5 class='notes'>(Select a time range to zoom in)</h5>
       </div> 
-      <div id="monthly-volume-chart", class="col-md-9 container">
+      <div id="monthly-volume-chart", class="col-md-9">
         <strong>Monthly Number of Graffiti Complaints</strong>
       </div>
   </div>
@@ -390,7 +396,7 @@
   <div class="row">
     <div class="col-md-3">
       <div class="btn-group-vertical" role="group" aria-label="...">
-          <h5 class='notes'>Change Map Style Here:</h5></br>
+          <h5 class='notes'>(Control using the time slider)</h5></br>
       </div>
     </div>
     <div class="container",class="col-md-9">
