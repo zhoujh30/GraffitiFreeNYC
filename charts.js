@@ -15,7 +15,7 @@ var quarterChart = dc.rowChart('#quarter-chart');
 var dayOfWeekChart = dc.rowChart('#day-of-week-chart');
 // var moveChart = dc.lineChart('#monthly-move-chart');
 var volumeChart = dc.barChart('#monthly-volume-chart');
-var useChart = dc.rowChart('#use-chart');
+var statusChart = dc.rowChart('#status-chart');
 // var yearlyBubbleChart = dc.bubbleChart('#yearly-bubble-chart');
 // var nasdaqCount = dc.dataCount('.dc-data-count');
 // var nasdaqTable = dc.dataTable('.dc-data-table');
@@ -60,13 +60,13 @@ var useChart = dc.rowChart('#use-chart');
 //d3.json('data.json', function(data) {...};
 //jQuery.getJson('data.json', function(data){...});
 //```
-d3.csv('graffitibyboro_date_type.csv', function (data) {
+d3.csv('data/closedincidents0511_chart.csv', function (data) {
     // Since its a csv file we need to format the data a bit.
     var dateFormat = d3.time.format('%Y-%m-%d');
     var numberFormat = d3.format('.2f');
 
     data.forEach(function (d) {
-        d.dd = dateFormat.parse(d.eachdate);
+        d.dd = dateFormat.parse(d.opendate);
         d.month = d3.time.month(d.dd); // pre-calculate month for better performance
         // d.close = +d.close; // coerce to number
         // d.open = +d.open;
@@ -157,37 +157,41 @@ d3.csv('graffitibyboro_date_type.csv', function (data) {
     // );
 
     // Create categorical dimension
-    var use = ndx.dimension(function (d) {
-        if (d.location_type.includes('Comercial')){
-            return 'Commercial';
-        } else if (d.location_type.includes('Residential')) {
-            return 'Residential';
-        } else if (d.location_type == 'Mixed Use') {
-            return 'Mixed Use';
-        } else if (d.location_type.length>0) {
-            return 'Street/Sidewalk';
+    var status = ndx.dimension(function (d) {
+        if (d.ra.includes('CannotLocateProperty')){
+            return 'Cannot Locate Property';
+        } else if (d.ra.includes('DownloadedForCleaning')) {
+            return 'Downloaded For Cleaning';
+        } else if (d.ra == 'NoGraffitiOnProperty') {
+            return 'NoGraffiti On Property';
+        } else if (d.ra == 'OwnerRefused') {
+            return 'Owner Refused';
+        } else if (d.ra == 'PropertyCleaned') {
+            return 'Property Cleaned';
         } else {
-            return 'N/A';
+            return 'Others';
         }
     });
     // Produce counts records in the dimension
-    var useGroup = use.group().reduceSum(function (d) {
+    var statusGroup = status.group().reduceSum(function (d) {
         return d.number;
     });
 
        // Create categorical dimension
     var borough = ndx.dimension(function (d) {
-        if (d.borough == 'MANHATTAN') {
-            return 'MN';
-        } else if (d.borough == 'BROOKLYN') {
-            return 'BK';
-        } else if (d.borough == 'QUEENS') {
-            return 'QN';
-        } else if (d.borough == 'BRONX') {
-            return 'BX';
-        } else {
-            return 'SI';
-        }
+
+        return d.boro
+        // if (d.borough == 'MANHATTAN') {
+        //     return 'MN';
+        // } else if (d.borough == 'BROOKLYN') {
+        //     return 'BK';
+        // } else if (d.borough == 'QUEENS') {
+        //     return 'QN';
+        // } else if (d.borough == 'BRONX') {
+        //     return 'BX';
+        // } else {
+        //     return 'SI';
+        // }
     });
     // Produce counts records in the dimension
     var boroughGroup = borough.group().reduceSum(function (d) {
@@ -475,12 +479,12 @@ d3.csv('graffitibyboro_date_type.csv', function (data) {
         .xAxis().ticks(4);
 
 
-    useChart /* dc.rowChart('#day-of-week-chart', 'chartGroup') */
+    statusChart /* dc.rowChart('#day-of-week-chart', 'chartGroup') */
         .width(180)
         .height(180)
         .margins({top: 20, left: 0, right: 20, bottom: 40})
-        .group(useGroup)
-        .dimension(use)
+        .group(statusGroup)
+        .dimension(status)
         // Assign colors to each value in the x scale domain
         .ordinalColors(['#fbb4ae','#fdc086','#80b1d3','#ffff99','#beaed4'])
         // .label(function (d) {
