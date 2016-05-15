@@ -13,9 +13,12 @@ var boroughChart = dc.rowChart('#borough-chart');
 // var fluctuationChart = dc.barChart('#fluctuation-chart');
 var quarterChart = dc.rowChart('#quarter-chart');
 var dayOfWeekChart = dc.rowChart('#day-of-week-chart');
-// var moveChart = dc.lineChart('#monthly-move-chart');
+var openCloseTimeChart = dc.lineChart('#openCloseTime-chart');
 var volumeChart = dc.barChart('#monthly-volume-chart');
-var useChart = dc.rowChart('#use-chart');
+var statusChart = dc.rowChart('#status-chart');
+var cleanbyChart = dc.rowChart('#cleanby-chart');
+var openCloseChart = dc.rowChart('#open-close-chart');
+var locationChart = dc.rowChart('#location-chart');
 // var yearlyBubbleChart = dc.bubbleChart('#yearly-bubble-chart');
 // var nasdaqCount = dc.dataCount('.dc-data-count');
 // var nasdaqTable = dc.dataTable('.dc-data-table');
@@ -60,24 +63,24 @@ var useChart = dc.rowChart('#use-chart');
 //d3.json('data.json', function(data) {...};
 //jQuery.getJson('data.json', function(data){...});
 //```
-d3.csv('graffitibyboro_date_type.csv', function (data) {
+d3.csv('data/closedincidents0511_chart.csv', function (data) {
     // Since its a csv file we need to format the data a bit.
     var dateFormat = d3.time.format('%Y-%m-%d');
     var numberFormat = d3.format('.2f');
 
     data.forEach(function (d) {
-        d.dd = dateFormat.parse(d.eachdate);
+        d.dd = dateFormat.parse(d.opendate);
+        console.log(d.closedate)
         d.month = d3.time.month(d.dd); // pre-calculate month for better performance
         // d.close = +d.close; // coerce to number
         // d.open = +d.open;
     });
-    // console.log(d.['date'], d[2])
+    
     //### Create Crossfilter Dimensions and Groups
 
     //See the [crossfilter API](https://github.com/square/crossfilter/wiki/API-Reference) for reference.
     var ndx = crossfilter(data);
     var all = ndx.groupAll();
-    console.log(all)
 
     // Dimension by year
     var yearlyDimension = ndx.dimension(function (d) {
@@ -157,40 +160,88 @@ d3.csv('graffitibyboro_date_type.csv', function (data) {
     // );
 
     // Create categorical dimension
-    var use = ndx.dimension(function (d) {
-        if (d.location_type.includes('Comercial')){
-            return 'Commercial';
-        } else if (d.location_type.includes('Residential')) {
-            return 'Residential';
-        } else if (d.location_type == 'Mixed Use') {
-            return 'Mixed Use';
-        } else if (d.location_type.length>0) {
-            return 'Street/Sidewalk';
+    var status = ndx.dimension(function (d) {
+        if (d.ra.includes('CannotLocateProperty')){
+            return 'Cannot Locate Property';
+        } else if (d.ra.includes('DownloadedForCleaning')) {
+            return 'Downloaded For Cleaning';
+        } else if (d.ra == 'NoGraffitiOnProperty') {
+            return 'No Graffiti On Property';
+        } else if (d.ra == 'OwnerRefused') {
+            return 'Owner Refused';
+        } else if (d.ra == 'PropertyCleaned') {
+            return 'Property Cleaned';
         } else {
-            return 'N/A';
+            return 'Others';
         }
     });
     // Produce counts records in the dimension
-    var useGroup = use.group().reduceSum(function (d) {
+    var statusGroup = status.group().reduceSum(function (d) {
         return d.number;
     });
 
        // Create categorical dimension
     var borough = ndx.dimension(function (d) {
-        if (d.borough == 'MANHATTAN') {
-            return 'MN';
-        } else if (d.borough == 'BROOKLYN') {
-            return 'BK';
-        } else if (d.borough == 'QUEENS') {
-            return 'QN';
-        } else if (d.borough == 'BRONX') {
-            return 'BX';
-        } else {
-            return 'SI';
-        }
+
+        return d.boro
+        // if (d.borough == 'MANHATTAN') {
+        //     return 'MN';
+        // } else if (d.borough == 'BROOKLYN') {
+        //     return 'BK';
+        // } else if (d.borough == 'QUEENS') {
+        //     return 'QN';
+        // } else if (d.borough == 'BRONX') {
+        //     return 'BX';
+        // } else {
+        //     return 'SI';
+        // }
     });
     // Produce counts records in the dimension
     var boroughGroup = borough.group().reduceSum(function (d) {
+        return d.number;
+    });
+
+    var cleanby = ndx.dimension(function (d) {
+        if (d.cleaned_by == 'EDC') {
+            return 'EDC';
+        } else if (d.cleaned_by == 'DSNY') {
+            return 'DSNY';
+        } else {
+            return 'Others';
+        }
+        return d.cleaned_by
+    });
+
+    var cleanbyGroup = cleanby.group().reduceSum(function (d) {
+        return d.number;
+    });
+
+    var openClose = ndx.dimension(function (d) {
+        // if (d.openclosed == 'Open') {
+        //     return 'Open';
+        // } else if (d.cleaned_by == 'Closed') {
+        //     return 'Closed';
+        // } else {
+        //     return 'Others';
+        // }
+        return d.openclosed
+    });
+
+    var openCloseGroup = openClose.group().reduceSum(function (d) {
+        return d.number;
+    });
+
+    var location = ndx.dimension(function (d) {
+        if (d.rolldowngate == 'Yes') {
+            return 'Ground Floor - Rolldown Gate';
+        } else if (d.groundfloor == 'Yes') {
+            return 'Ground Floor - Others';
+        } else {
+            return 'Above Ground Floor';
+        }
+    });
+
+    var locationGroup = location.group().reduceSum(function (d) {
         return d.number;
     });
 
@@ -214,6 +265,7 @@ d3.csv('graffitibyboro_date_type.csv', function (data) {
             return 'Q4';
         }
     });
+
     var quarterGroup = quarter.group().reduceSum(function (d) {
         return d.number;
     });
@@ -224,6 +276,7 @@ d3.csv('graffitibyboro_date_type.csv', function (data) {
         var name = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
         return day + '.' + name[day];
     });
+
     var dayOfWeekGroup = dayOfWeek.group().reduceSum(function (d) {
         return d.number;
     });
@@ -423,7 +476,7 @@ d3.csv('graffitibyboro_date_type.csv', function (data) {
     dayOfWeekChart /* dc.rowChart('#day-of-week-chart', 'chartGroup') */
         .width(180)
         .height(180)
-        .margins({top: 20, left: 0, right: 20, bottom: 40})
+        .margins({top: 5, left: 0, right: 20, bottom: 40})
         .group(dayOfWeekGroup)
         .dimension(dayOfWeek)
         // Assign colors to each value in the x scale domain
@@ -441,7 +494,7 @@ d3.csv('graffitibyboro_date_type.csv', function (data) {
     quarterChart /* dc.rowChart('#day-of-week-chart', 'chartGroup') */
         .width(180)
         .height(180)
-        .margins({top: 20, left: 0, right: 20, bottom: 40})
+        .margins({top: 5, left: 0, right: 20, bottom: 40})
         .group(quarterGroup)
         .dimension(quarter)
         // Assign colors to each value in the x scale domain
@@ -459,7 +512,7 @@ d3.csv('graffitibyboro_date_type.csv', function (data) {
     boroughChart /* dc.rowChart('#day-of-week-chart', 'chartGroup') */
         .width(180)
         .height(180)
-        .margins({top: 20, left: 0, right: 20, bottom: 40})
+        .margins({top: 5, left: 0, right: 20, bottom: 40})
         .group(boroughGroup)
         .dimension(borough)
         // Assign colors to each value in the x scale domain
@@ -475,14 +528,14 @@ d3.csv('graffitibyboro_date_type.csv', function (data) {
         .xAxis().ticks(4);
 
 
-    useChart /* dc.rowChart('#day-of-week-chart', 'chartGroup') */
+    statusChart /* dc.rowChart('#day-of-week-chart', 'chartGroup') */
         .width(180)
         .height(180)
-        .margins({top: 20, left: 0, right: 20, bottom: 40})
-        .group(useGroup)
-        .dimension(use)
+        .margins({top: 5, left: 0, right: 20, bottom: 40})
+        .group(statusGroup)
+        .dimension(status)
         // Assign colors to each value in the x scale domain
-        .ordinalColors(['#fbb4ae','#fdc086','#80b1d3','#ffff99','#beaed4'])
+        .ordinalColors(['#8dd3c7','#ffffb3','#bebada','#fb8072','#80b1d3','#fdb462'])
         // .label(function (d) {
         //     return d.key;
         // })
@@ -492,6 +545,61 @@ d3.csv('graffitibyboro_date_type.csv', function (data) {
         })
         .elasticX(true)
         .xAxis().ticks(4);
+
+    cleanbyChart /* dc.rowChart('#day-of-week-chart', 'chartGroup') */
+        .width(240)
+        .height(120)
+        .margins({top: 5, left: 0, right: 20, bottom: 40})
+        .group(cleanbyGroup)
+        .dimension(cleanby)
+        // Assign colors to each value in the x scale domain
+        .ordinalColors(['#beaed4','#fdc086','#e41a1c'])
+        // .label(function (d) {
+        //     return d.key;
+        // })
+        // Title sets the row text
+        .title(function (d) {
+            return d.value;
+        })
+        .elasticX(true)
+        .xAxis().ticks(4);
+
+    openCloseChart /* dc.rowChart('#day-of-week-chart', 'chartGroup') */
+        .width(240)
+        .height(120)
+        .margins({top: 5, left: 0, right: 20, bottom: 40})
+        .group(openCloseGroup)
+        .dimension(openClose)
+        // Assign colors to each value in the x scale domain
+        .ordinalColors(['#b3e2cd','#fdcdac','#cbd5e8'])
+        // .label(function (d) {
+        //     return d.key;
+        // })
+        // Title sets the row text
+        .title(function (d) {
+            return d.value;
+        })
+        .elasticX(true)
+        .xAxis().ticks(4);
+
+    locationChart /* dc.rowChart('#day-of-week-chart', 'chartGroup') */
+        .width(240)
+        .height(120)
+        .margins({top: 5, left: 0, right: 20, bottom: 40})
+        .group(locationGroup)
+        .dimension(location)
+        // Assign colors to each value in the x scale domain
+        .ordinalColors(['#fc8d62','#8da0cb','#e78ac3'])
+        // .label(function (d) {
+        //     return d.key;
+        // })
+        // Title sets the row text
+        .title(function (d) {
+            return d.value;
+        })
+        .elasticX(true)
+        .xAxis().ticks(4);
+
     //#### Bar Chart
 
     // Create a bar chart and use the given css selector as anchor. You can also specify
@@ -529,29 +637,30 @@ d3.csv('graffitibyboro_date_type.csv', function (data) {
 
     //#### Stacked Area Chart
 
-    //Specify an area chart by using a line chart with `.renderArea(true)`.
+    // Specify an area chart by using a line chart with `.renderArea(true)`.
     // <br>API: [Stack Mixin](https://github.com/dc-js/dc.js/blob/master/web/docs/api-latest.md#stack-mixin),
     // [Line Chart](https://github.com/dc-js/dc.js/blob/master/web/docs/api-latest.md#line-chart)
-    // moveChart /* dc.lineChart('#monthly-move-chart', 'chartGroup') */
-    //     .renderArea(true)
-    //     .width(990)
-    //     .height(200)
-    //     .transitionDuration(1000)
-    //     .margins({top: 30, right: 50, bottom: 25, left: 40})
-    //     .dimension(moveMonths)
-    //     .mouseZoomable(true)
-    // // Specify a "range chart" to link its brush extent with the zoom of the current "focus chart".
-    //     .rangeChart(volumeChart)
-    //     .x(d3.time.scale().domain([new Date(2010, 1, 1), new Date(2016, 3, 16)]))
-    //     .round(d3.time.month.round)
-    //     .xUnits(d3.time.months)
-    //     .elasticY(true)
-    //     .renderHorizontalGridLines(true)
+    openCloseTimeChart /* dc.lineChart('#monthly-move-chart', 'chartGroup') */
+        .renderArea(true)
+        .width(720)
+        .height(200)
+        .transitionDuration(1000)
+        .margins({top: 5, right: 20, bottom: 35, left: 50})
+        .dimension(moveMonths)
+        .group(volumeByMonthGroup, 'Open Incidents')
+        .mouseZoomable(true)
+    // Specify a "range chart" to link its brush extent with the zoom of the current "focus chart".
+        .rangeChart(volumeChart)
+        .x(d3.time.scale().domain([new Date(2003, 1, 1), new Date(2016, 1, 1)]))
+        .round(d3.time.month.round)
+        .xUnits(d3.time.months)
+        .elasticY(true)
+        .renderHorizontalGridLines(true)
     // //##### Legend
 
     //     // Position the legend relative to the chart origin and specify items' height and separation.
-    //     .legend(dc.legend().x(800).y(10).itemHeight(13).gap(5))
-    //     .brushOn(false)
+        .legend(dc.legend().x(60).y(10).itemHeight(13).gap(5))
+        .brushOn(false)
     //     // Add the base layer of the stack with group. The second parameter specifies a series name for use in the
     //     // legend.
     //     // The `.valueAccessor` will be used for the base layer
@@ -579,12 +688,12 @@ d3.csv('graffitibyboro_date_type.csv', function (data) {
     // will always match the zoom of the area chart.
     volumeChart.width(720) /* dc.barChart('#monthly-volume-chart', 'chartGroup'); */
         .height(200)
-        .margins({top: 20, right: 20, bottom: 30, left: 50})
+        .margins({top: 5, right: 20, bottom: 30, left: 50})
         .dimension(moveMonths)
         .group(volumeByMonthGroup)
         .centerBar(true)
         .gap(1)
-        .x(d3.time.scale().domain([new Date(2009, 10, 1), new Date(2016, 1, 1)]))
+        .x(d3.time.scale().domain([new Date(2003, 1 , 1), new Date(2016, 1, 1)]))
         .round(d3.time.month.round)
         .alwaysUseRounding(true)
         .xUnits(d3.time.months)

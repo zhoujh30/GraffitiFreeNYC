@@ -8,133 +8,18 @@
   <meta name="description" content="eportfolio">
   <meta name="author" content="Jianhao Zhou">
 
-  <link rel="stylesheet" href="css/style.css">
+  
   <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.6/flatly/bootstrap.min.css" rel="stylesheet" integrity="sha384-XYCjB+hFAjSbgf9yKUgbysEjaVLOXhCgATTEBpCqT1R3jvG5LGRAK5ZIyRbH5vpX" crossorigin="anonymous">
   <link href='https://fonts.googleapis.com/css?family=Crimson+Text' rel='stylesheet' type='text/css'>
   <link href='https://fonts.googleapis.com/css?family=Righteous' rel='stylesheet' type='text/css'>
   <link rel="stylesheet" href="http://libs.cartocdn.com/cartodb.js/v3/3.15/themes/css/cartodb.css" />
   <link rel="stylesheet" href="https://cdn.rawgit.com/novus/nvd3/v1.8.1/build/nv.d3.css" />
   <link rel="stylesheet" type="text/css" href="css/dc.css"/>
-  
-
-  <style type="text/css">
-
-    #zipmap, #TimeSeriesMap {
-      width: 820px;
-      height: 600px;
-      background-color: gray;
-    }
-
-   /* #NebeToolMap {
-      width: 100%;
-      height: 500px;
-      background-color: gray;
-    }*/
-
-/*    .myButton {
-      width: 80px;
-      height: 25px;
-      margin-bottom: 50px;
-      font-size: 12px;
-      border-radius: 10px;
-      margin-right: 10px;
-    }
-	  
-    .mapButton {
-      height: 50px;
-    }*/
-
-    .emailbutton {
-      height: 48px;
-    }
-
-    .bg {
-      background: url('data/bg.jpg') no-repeat center center;
-      position: fixed;
-      width: 100%;
-      height: 720px; /*same height as jumbotron */
-      top:0;
-      left:0;
-      z-index: -1;
-    }
-
-    .jumbotron {
-      width: 100%;
-      height: 720px;
-      padding-top: 268px;
-      padding-left: 175px;
-      color: white;
-      text-shadow: #444 0 5px 5px;
-      background: transparent;
-    }
-
-    .googlefont1 {
-      font-family: 'Righteous', cursive;
-    }
-
-/*    .googlefont2 {
-      font-family: 'Righteous', cursive;
-    }*/
-
-    .col-md-3 {
-      padding-left: 60px;
-      position: center;
-      font-size: 16;
-    }
-
-    .col-md-12 {
-      padding-left: 35px;
-    }
-
-    #info {
-      background: #FFFFFF;
-      padding: 10px;
-      border-radius: 10px;
-      font: bold, 10px;
-      position: relative;
-      top: -475px;
-      width: auto;
-      display: inline;
-      margin-left: 310px;
-    }
-
-    #courseImg {
-      height: 420px;
-      width: 840px;
-    }
-
-/*    #linkedin {
-      margin-top: 13px;
-      margin-right: 13px;
-      height: 33px;
-      width: 166px;
-    }*/
-
-    div.cartodb-timeslider .slider-wrapper {
-    width: 282px;
-    }
-
-    svg {
-        display: block;
-    }
-
-    #picImg {
-      height: 400px;
-      width: 800px;
-    }
-
-    .cartodb-logo {
-    opacity: 0;
-    }
-
-    .dc-chart g.row text {
-    fill: black;
-    }
-
-  </style>
+  <link rel="stylesheet" href="css/style.css">
 
   <style>.embed-container {position: relative; padding-bottom: 80%; height: 0; max-width: 80%;} .embed-container iframe, .embed-container object, .embed-container iframe{position: absolute; top: 0; left: 0; width: 100%; height: 100%;} small{position: absolute; z-index: 40; bottom: 0; margin-bottom: -15px;}
   </style>
+
   
 </head>
 
@@ -156,17 +41,6 @@
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav">
           <li class="active"><a href="#about">About<span class="sr-only">(current)</span></a></li>
-<!--           <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Projects<span class="caret"></span></a>
-            <ul class="dropdown-menu">
-              <li><a href="#nta">Complaints by Zip</a></li>
-              <li><a href="#">Neighborhood Tool</a></li>
-              <li><a href="#">Something else here</a></li>
-              <li role="separator" class="divider"></li>
-              <li><a href="https://db.tt/yoFH3baF", target="_blank">Neighborhood Planning Tool</a></li>
-              <li role="separator" class="divider"></li>
-              <li><a href="https://github.com/zhoujh30/PUI2015_jzhou/blob/master/Final/PUI2015_final_JianhaoZhou.ipynb", target="_blank">Asthma Factor Study</a></li>
-            </ul>
           </li> -->
           <li><a href="#charts">Charts</a></li>
           <!-- <li><a href="#nta">Choropleth</a></li> -->
@@ -237,7 +111,6 @@
                 </div>
               </div>
             </form> -->
-          
           For any inquiries, email me at <a class="btn btn-primary emailbutton" role="button" href="mailto:felix.zhou@nyu.edu">felix.zhou@nyu.edu</a>
         </div>
         <div class="modal-footer">
@@ -281,7 +154,7 @@
     <div class="container",class="col-md-9">
       </br>
       <div class="container",class="col-md-9">
-      <p class="col-md-9">Let's take a look at the total number of graffiti complaints by quarters, by day of week, by boroughs, by land uses, and by months. </br></br>There are slightly more complaints in quarter 2 (April, May, and June) than other three quarters. You can have a better sense of the yearly pattern with the monthly chart below. Meanwhile, more complaints arise on weekdays and in mixed use areas. Brooklyn outperforms the other four boroughs while Staten Island has the least complaints.</br></br>For number of complaints by quarters, boroughs, and land uses, we might be more confident to conclude that larger number of complaints means more graffiti created. For complaints by day of week, however, it may also result from people's tendency to complain on weekdays as opposed to weekends (if for properties near their workplace).</br></br>
+      <p class="col-md-9">Let's take a look at the total number of graffiti complaints by quarters, by day of week, by boroughs, by status, and by months. </br></br>There are slightly more complaints in quarter 2 (April, May, and June) than other three quarters. You can have a better sense of the yearly pattern with the monthly chart below. Meanwhile, more complaints arise on weekdays and in mixed use areas. Brooklyn outperforms the other four boroughs while Staten Island has the least complaints.</br></br>For number of complaints by quarters, boroughs, and status, we might be more confident to conclude that larger number of complaints means more graffiti created. For complaints by day of week, however, it may also result from people's tendency to complain on weekdays as opposed to weekends (if for properties near their workplace).</br></br>
       Explore and interact with the charts!</p> 
       </div>
     </div>
@@ -293,14 +166,12 @@
     </div>
     <div class="col-md-9">
       <div id="quarter-chart">
-        </br></br>
         <strong>Quarters</strong>
         <a class="reset" href="javascript:quarterChart.filterAll();dc.redrawAll();" style="display: none;">reset</a>
         <div class="clearfix"></div>
       </div>
 
       <div id="day-of-week-chart">
-          </br></br>
           <strong>Day of Week</strong>
           <a class="reset" href="javascript:dayOfWeekChart.filterAll();dc.redrawAll();" style="display: none;">reset</a>
           <div class="clearfix"></div>
@@ -308,16 +179,14 @@
 
       
       <div id="borough-chart">
-      </br></br>
         <strong>Boroughs</strong>
         <a class="reset" href="javascript:boroughChart.filterAll();dc.redrawAll();" style="display: none;">reset</a>
         <div class="clearfix"></div>
       </div>
 
-      <div id="use-chart">
-      </br></br>
-          <strong>Land Uses</strong>
-          <a class="reset" href="javascript:useChart.filterAll();dc.redrawAll();" style="display: none;">reset</a>
+      <div id="status-chart">
+          <strong>Status</strong>
+          <a class="reset" href="javascript:statusChart.filterAll();dc.redrawAll();" style="display: none;">reset</a>
           <div class="clearfix"></div>
       </div>
       
@@ -325,10 +194,45 @@
   </div>
 
   <div class="row">
+    <div class="col-md-3">
+      </br></br><h5 class='notes'>(Click to filter)</h5>
+    </div>
+    <div class="col-md-9">
+      <div id="cleanby-chart">
+        <strong>Clean Institutions</strong>
+        <a class="reset" href="javascript:cleanbyChart.filterAll();dc.redrawAll();" style="display: none;">reset</a>
+        <div class="clearfix"></div>
+      </div>
+
+      <div id="open-close-chart">
+          <strong>Open/Closed</strong>
+          <a class="reset" href="javascript:openCloseChart.filterAll();dc.redrawAll();" style="display: none;">reset</a>
+          <div class="clearfix"></div>
+      </div>
+  
+      <div id="location-chart">
+        <strong>Location</strong>
+        <a class="reset" href="javascript:locationChart.filterAll();dc.redrawAll();" style="display: none;">reset</a>
+        <div class="clearfix"></div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="row">
+      <div class="col-md-3" id='charts'>
+        </br></br></br></br><h5 class='notes'></h5>
+      </div> 
+      <div id="openCloseTime-chart", class="col-md-9"></br></br>
+        <strong>Open and Closed Graffiti Complaints</strong>
+      </div>
+  </div>
+
+  <div class="row">
       <div class="col-md-3" id='charts'>
         </br></br></br></br><h5 class='notes'>(Select a time range to zoom in)</h5>
       </div> 
-      <div id="monthly-volume-chart", class="col-md-9"></br></br>
+      <div id="monthly-volume-chart", class="col-md-9">
         <strong>Monthly Number of Graffiti Complaints</strong>
       </div>
   </div>
@@ -348,7 +252,7 @@
   <div class="row">
     <div class="col-md-3">
 <!--       <div class="btn-group-vertical" role="group" aria-label="..."> -->
-          <h5 class='notes'>By Neighborhood Tabulation Area</br></br>(Please click a neighborhood)</h5></br>
+          <h5 class='notes'>By Neighborhood Tabulation Area</br></br>(Please hover over a neighborhood)</h5></br>
        <!--    <button id="one" type="button" class="btn btn-success mapButton">Default</button></br>
           <button id="two" type="button" class="btn btn-primary mapButton">Thunderforest</button></br>
           <button id="three" type="button" class="btn btn-danger mapButton">Watercolor</button> -->
@@ -375,10 +279,9 @@
   </br>
   <div class="row">
     <div class="col-md-3">
-        <h5 class='notes'>By Zip Code </br></br>(Please hover over a zip code)</h5></br>
+        <h5 class='notes'>By Zip Code </br></br>(Please click a zip code)</h5></br>
     </div>
     <div class="container",class="col-md-9">
-      <!-- <div class="embed-container"><small><a href="//felixzhou.maps.arcgis.com/apps/Embed/index.html?webmap=f2754acb8f7f4d8b813d89db9f9fae20&amp;extent=-74.5982,40.4033,-73.2963,41.033&amp;zoom=true&amp;scale=true&amp;search=true&amp;searchextent=true&amp;legend=true&amp;basemap_gallery=true&amp;disable_scroll=true&amp;theme=light" style="color:#0000FF;text-align:left" target="_blank">View larger map</a></small><br><iframe width="300" height="300" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" title="GraffitiByZip" src="//felixzhou.maps.arcgis.com/apps/Embed/index.html?webmap=f2754acb8f7f4d8b813d89db9f9fae20&amp;extent=-74.5982,40.4033,-73.2963,41.033&amp;zoom=true&amp;scale=true&amp;search=true&amp;searchextent=true&amp;legend=true&amp;basemap_gallery=true&amp;disable_scroll=true&amp;theme=light"></iframe></div> -->
       <iframe width="820" height="600" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" title="GraffitiByZip" src="//felixzhou.maps.arcgis.com/apps/Embed/index.html?webmap=f2754acb8f7f4d8b813d89db9f9fae20&amp;extent=-74.5982,40.4033,-73.2963,41.033&amp;zoom=true&amp;scale=true&amp;search=true&amp;searchextent=true&amp;legend=true&amp;basemap_gallery=true&amp;disable_scroll=true&amp;theme=light"></iframe>
       </br>
       </br>
@@ -406,37 +309,7 @@
       <div id="TimeSeriesMap"></div>
     </div>
   </div>
-  
   </br>
-  </br>
-  </br>
-  </br>
-  </br>
-
-<!--   <nav class="navbar navbar-default navbar-fixed-bottom">
-    <div class="container-fluid"> -->
-        <!-- Brand and toggle get grouped for better mobile display -->
-<!--         <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="#top">Return to top</a>
-        </div>
-        
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-          <ul class="nav navbar-nav navbar-right">
- -->            <!-- <li class="active"><a href="#about">About<span class="sr-only">(current)</span></a></li> -->
-           <!--  <a href="https://www.linkedin.com/pub/jianhao-felix-zhou/35/50b/a8"  target="_blank">
-              <img id='linkedin' src="https://static.licdn.com/scds/common/u/img/webpromo/btn_viewmy_160x33.png" border="0" alt="View Jianhao (Felix) Zhou's profile on LinkedIn">
-            </a>
-            <li><a href="mailto:felix.zhou@nyu.edu">felix.zhou@nyu.edu</a></li>
-          </ul>
-        </div>
-    </div>
-  </nav> -->
 
   <script src="js/jquery.js"></script>
   <script src="http://libs.cartocdn.com/cartodb.js/v3/3.15/cartodb.js"></script>
@@ -447,93 +320,7 @@
   <script type="text/javascript" src="js/dc.js"></script>
   <script type="text/javascript" src="js/colorbrewer.js"></script>
   <script src="js/javascript.js"></script> 
-  <!-- <script src="js/charts1.js"></script>  -->
-  <script src="js/charts.js"></script> 
-
-  
-  <script type="text/javascript">
-
-    var jumboHeight = $('.jumbotron').outerHeight();
-    function parallax(){
-        var scrolled = $(window).scrollTop();
-        $('.bg').css('height', (jumboHeight-scrolled) + 'px');
-    }
-
-    $(window).scroll(function(e){
-        parallax();
-    });
-  
-    var layer1 = L.tileLayer('http://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',{
-    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'
-    });
-
-    // Choropleth
-    var layerUrl1 = 'https://jz1894.cartodb.com/api/v2/viz/19c01f9c-fe7f-11e5-a018-0ecfd53eb7d3/viz.json';
-    
-    var map1 = new L.Map('zipmap', { 
-      center: [40.7127,-74.0059],
-      zoom: 10
-    });
-
-    L.tileLayer('http://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',{
-      attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'
-    }).addTo(map1);
-	  
-    cartodb.createLayer(map1, layerUrl1)
-      .addTo(map1)
-      .on('done', function(layer) {
-      }).on('error', function() {
-        //log the error
-    });
-
-
-    // Times Series
-    var layerUrl2 = 'https://jz1894.cartodb.com/api/v2/viz/86bd6dc4-ef21-11e5-a907-0e3ff518bd15/viz.json';
-
-    var map2 = new L.Map('TimeSeriesMap', { 
-      center: [40.7127,-74.0059],
-      zoom: 10
-    });
-
-    L.tileLayer('http://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',{
-      attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'
-    }).addTo(map2);
-
-    cartodb.createLayer(map2, layerUrl2)
-      .addTo(map2)
-      .on('done', function(layer) {
-      }).on('error', function() {
-        //log the error
-    });
-
-	 
-
-    function scroll_if_anchor(href) {
-        href = typeof(href) == "string" ? href : $(this).attr("href");      
-        // You could easily calculate this dynamically if you prefer
-        var fromTop = 50;
-        // If our Href points to a valid, non-empty anchor, and is on the same page (e.g. #foo)
-        // Legacy jQuery and IE7 may have issues: http://stackoverflow.com/q/1593174
-        if(href.indexOf("#") == 0) {
-            var $target = $(href);
-            // Older browser without pushState might flicker here, as they momentarily
-            // jump to the wrong position (IE < 10)
-            if($target.length) {
-                $('html, body').animate({ scrollTop: $target.offset().top - fromTop });
-                if(history && "pushState" in history) {
-                    history.pushState({}, document.title, window.location.pathname + href);
-                    return false;
-                }
-            }
-        }
-    }    
-    // When our page loads, check to see if it contains and anchor
-    scroll_if_anchor(window.location.hash);
-    // Intercept all anchor clicks
-    $("body").on("click", "a", scroll_if_anchor);
-
-
-  </script>
+  <script src="charts.js"></script> 
   
  
 </body>

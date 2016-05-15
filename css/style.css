@@ -1,35 +1,84 @@
-h5 {
-  font-style: italic;
+#zipmap, #TimeSeriesMap {
+  width: 820px;
+  height: 600px;
+  background-color: gray;
 }
 
-p {
-  font-family: sans-serif;
+.emailbutton {
+  height: 48px;
 }
 
-#myFirstDiv {
-  background-color: #cccccc;
-  color: black;
-  margin: 15px;
-  padding: 15px;
-  font-family: sans-serif;
-  border-radius: 20px;
+.bg {
+  background: url('../data/bg.jpg') no-repeat center center;
+  position: fixed;
+  width: 100%;
+  height: 720px; /*same height as jumbotron */
+  top:0;
+  left:0;
+  z-index: -1;
 }
 
-li a {
-  color: yellow;
+.jumbotron {
+  width: 100%;
+  height: 720px;
+  padding-top: 268px;
+  padding-left: 175px;
+  color: white;
+  text-shadow: #444 0 5px 5px;
+  background: transparent;
 }
 
-.notTestClass {
-  margin-left: 20px;
+.googlefont1 {
+  font-family: 'Righteous', cursive;
 }
 
-.photo {
-  height: 150px;
-  width: 150px;
-  background-image: url('https://db.tt/as1GV6hw');
-  background-size: 100%;
+.col-md-3 {
+  padding-left: 60px;
+  position: center;
+  font-size: 16;
 }
 
+.col-md-12 {
+  padding-left: 35px;
+}
+
+#info {
+  background: #FFFFFF;
+  padding: 10px;
+  border-radius: 10px;
+  font: bold, 10px;
+  position: relative;
+  top: -475px;
+  width: auto;
+  display: inline;
+  margin-left: 310px;
+}
+
+#courseImg {
+  height: 420px;
+  width: 840px;
+}
+
+div.cartodb-timeslider .slider-wrapper {
+width: 282px;
+}
+
+svg {
+    display: block;
+}
+
+#picImg {
+  height: 400px;
+  width: 800px;
+}
+
+.cartodb-logo {
+  opacity: 0;
+}
+
+.dc-chart g.row text {
+  fill: black;
+}
 
 
 
