@@ -13,9 +13,12 @@ var boroughChart = dc.rowChart('#borough-chart');
 // var fluctuationChart = dc.barChart('#fluctuation-chart');
 var quarterChart = dc.rowChart('#quarter-chart');
 var dayOfWeekChart = dc.rowChart('#day-of-week-chart');
-// var moveChart = dc.lineChart('#monthly-move-chart');
+// var opencloseChart = dc.lineChart('#open-close-chart');
 var volumeChart = dc.barChart('#monthly-volume-chart');
 var statusChart = dc.rowChart('#status-chart');
+var cleanbyChart = dc.rowChart('#cleanby-chart');
+var openCloseChart = dc.rowChart('#open-close-chart');
+var locationChart = dc.rowChart('#location-chart');
 // var yearlyBubbleChart = dc.bubbleChart('#yearly-bubble-chart');
 // var nasdaqCount = dc.dataCount('.dc-data-count');
 // var nasdaqTable = dc.dataTable('.dc-data-table');
@@ -77,7 +80,6 @@ d3.csv('data/closedincidents0511_chart.csv', function (data) {
     //See the [crossfilter API](https://github.com/square/crossfilter/wiki/API-Reference) for reference.
     var ndx = crossfilter(data);
     var all = ndx.groupAll();
-    console.log(all)
 
     // Dimension by year
     var yearlyDimension = ndx.dimension(function (d) {
@@ -163,7 +165,7 @@ d3.csv('data/closedincidents0511_chart.csv', function (data) {
         } else if (d.ra.includes('DownloadedForCleaning')) {
             return 'Downloaded For Cleaning';
         } else if (d.ra == 'NoGraffitiOnProperty') {
-            return 'NoGraffiti On Property';
+            return 'No Graffiti On Property';
         } else if (d.ra == 'OwnerRefused') {
             return 'Owner Refused';
         } else if (d.ra == 'PropertyCleaned') {
@@ -198,6 +200,50 @@ d3.csv('data/closedincidents0511_chart.csv', function (data) {
         return d.number;
     });
 
+    var cleanby = ndx.dimension(function (d) {
+        if (d.cleaned_by == 'EDC') {
+            return 'EDC';
+        } else if (d.cleaned_by == 'DSNY') {
+            return 'DSNY';
+        } else {
+            return 'Others';
+        }
+        return d.cleaned_by
+    });
+
+    var cleanbyGroup = cleanby.group().reduceSum(function (d) {
+        return d.number;
+    });
+
+    var openClose = ndx.dimension(function (d) {
+        // if (d.openclosed == 'Open') {
+        //     return 'Open';
+        // } else if (d.cleaned_by == 'Closed') {
+        //     return 'Closed';
+        // } else {
+        //     return 'Others';
+        // }
+        return d.openclosed
+    });
+
+    var openCloseGroup = openClose.group().reduceSum(function (d) {
+        return d.number;
+    });
+
+    var location = ndx.dimension(function (d) {
+        if (d.rolldowngate == 'Yes') {
+            return 'Ground Floor - Rolldown Gate';
+        } else if (d.groundfloor == 'Yes') {
+            return 'Ground Floor - Others';
+        } else {
+            return 'Above Ground Floor';
+        }
+    });
+
+    var locationGroup = location.group().reduceSum(function (d) {
+        return d.number;
+    });
+
 
     // Determine a histogram of percent changes
     // var fluctuation = ndx.dimension(function (d) {
@@ -218,6 +264,7 @@ d3.csv('data/closedincidents0511_chart.csv', function (data) {
             return 'Q4';
         }
     });
+
     var quarterGroup = quarter.group().reduceSum(function (d) {
         return d.number;
     });
@@ -228,6 +275,7 @@ d3.csv('data/closedincidents0511_chart.csv', function (data) {
         var name = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
         return day + '.' + name[day];
     });
+
     var dayOfWeekGroup = dayOfWeek.group().reduceSum(function (d) {
         return d.number;
     });
@@ -427,7 +475,7 @@ d3.csv('data/closedincidents0511_chart.csv', function (data) {
     dayOfWeekChart /* dc.rowChart('#day-of-week-chart', 'chartGroup') */
         .width(180)
         .height(180)
-        .margins({top: 20, left: 0, right: 20, bottom: 40})
+        .margins({top: 5, left: 0, right: 20, bottom: 40})
         .group(dayOfWeekGroup)
         .dimension(dayOfWeek)
         // Assign colors to each value in the x scale domain
@@ -445,7 +493,7 @@ d3.csv('data/closedincidents0511_chart.csv', function (data) {
     quarterChart /* dc.rowChart('#day-of-week-chart', 'chartGroup') */
         .width(180)
         .height(180)
-        .margins({top: 20, left: 0, right: 20, bottom: 40})
+        .margins({top: 5, left: 0, right: 20, bottom: 40})
         .group(quarterGroup)
         .dimension(quarter)
         // Assign colors to each value in the x scale domain
@@ -463,7 +511,7 @@ d3.csv('data/closedincidents0511_chart.csv', function (data) {
     boroughChart /* dc.rowChart('#day-of-week-chart', 'chartGroup') */
         .width(180)
         .height(180)
-        .margins({top: 20, left: 0, right: 20, bottom: 40})
+        .margins({top: 5, left: 0, right: 20, bottom: 40})
         .group(boroughGroup)
         .dimension(borough)
         // Assign colors to each value in the x scale domain
@@ -482,11 +530,11 @@ d3.csv('data/closedincidents0511_chart.csv', function (data) {
     statusChart /* dc.rowChart('#day-of-week-chart', 'chartGroup') */
         .width(180)
         .height(180)
-        .margins({top: 20, left: 0, right: 20, bottom: 40})
+        .margins({top: 5, left: 0, right: 20, bottom: 40})
         .group(statusGroup)
         .dimension(status)
         // Assign colors to each value in the x scale domain
-        .ordinalColors(['#fbb4ae','#fdc086','#80b1d3','#ffff99','#beaed4'])
+        .ordinalColors(['#8dd3c7','#ffffb3','#bebada','#fb8072','#80b1d3','#fdb462'])
         // .label(function (d) {
         //     return d.key;
         // })
@@ -496,6 +544,61 @@ d3.csv('data/closedincidents0511_chart.csv', function (data) {
         })
         .elasticX(true)
         .xAxis().ticks(4);
+
+    cleanbyChart /* dc.rowChart('#day-of-week-chart', 'chartGroup') */
+        .width(240)
+        .height(120)
+        .margins({top: 5, left: 0, right: 20, bottom: 40})
+        .group(cleanbyGroup)
+        .dimension(cleanby)
+        // Assign colors to each value in the x scale domain
+        .ordinalColors(['#beaed4','#fdc086','#e41a1c'])
+        // .label(function (d) {
+        //     return d.key;
+        // })
+        // Title sets the row text
+        .title(function (d) {
+            return d.value;
+        })
+        .elasticX(true)
+        .xAxis().ticks(4);
+
+    openCloseChart /* dc.rowChart('#day-of-week-chart', 'chartGroup') */
+        .width(240)
+        .height(120)
+        .margins({top: 5, left: 0, right: 20, bottom: 40})
+        .group(openCloseGroup)
+        .dimension(openClose)
+        // Assign colors to each value in the x scale domain
+        .ordinalColors(['#b3e2cd','#fdcdac','#cbd5e8'])
+        // .label(function (d) {
+        //     return d.key;
+        // })
+        // Title sets the row text
+        .title(function (d) {
+            return d.value;
+        })
+        .elasticX(true)
+        .xAxis().ticks(4);
+
+    locationChart /* dc.rowChart('#day-of-week-chart', 'chartGroup') */
+        .width(240)
+        .height(120)
+        .margins({top: 5, left: 0, right: 20, bottom: 40})
+        .group(locationGroup)
+        .dimension(location)
+        // Assign colors to each value in the x scale domain
+        .ordinalColors(['#fc8d62','#8da0cb','#e78ac3'])
+        // .label(function (d) {
+        //     return d.key;
+        // })
+        // Title sets the row text
+        .title(function (d) {
+            return d.value;
+        })
+        .elasticX(true)
+        .xAxis().ticks(4);
+
     //#### Bar Chart
 
     // Create a bar chart and use the given css selector as anchor. You can also specify
@@ -583,12 +686,12 @@ d3.csv('data/closedincidents0511_chart.csv', function (data) {
     // will always match the zoom of the area chart.
     volumeChart.width(720) /* dc.barChart('#monthly-volume-chart', 'chartGroup'); */
         .height(200)
-        .margins({top: 20, right: 20, bottom: 30, left: 50})
+        .margins({top: 5, right: 20, bottom: 30, left: 50})
         .dimension(moveMonths)
         .group(volumeByMonthGroup)
         .centerBar(true)
         .gap(1)
-        .x(d3.time.scale().domain([new Date(2009, 10, 1), new Date(2016, 1, 1)]))
+        .x(d3.time.scale().domain([new Date(2003, 1 , 1), new Date(2016, 1, 1)]))
         .round(d3.time.month.round)
         .alwaysUseRounding(true)
         .xUnits(d3.time.months)

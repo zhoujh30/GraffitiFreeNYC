@@ -166,14 +166,12 @@
     </div>
     <div class="col-md-9">
       <div id="quarter-chart">
-        </br></br>
         <strong>Quarters</strong>
         <a class="reset" href="javascript:quarterChart.filterAll();dc.redrawAll();" style="display: none;">reset</a>
         <div class="clearfix"></div>
       </div>
 
       <div id="day-of-week-chart">
-          </br></br>
           <strong>Day of Week</strong>
           <a class="reset" href="javascript:dayOfWeekChart.filterAll();dc.redrawAll();" style="display: none;">reset</a>
           <div class="clearfix"></div>
@@ -181,14 +179,12 @@
 
       
       <div id="borough-chart">
-      </br></br>
         <strong>Boroughs</strong>
         <a class="reset" href="javascript:boroughChart.filterAll();dc.redrawAll();" style="display: none;">reset</a>
         <div class="clearfix"></div>
       </div>
 
       <div id="status-chart">
-      </br></br>
           <strong>Status</strong>
           <a class="reset" href="javascript:statusChart.filterAll();dc.redrawAll();" style="display: none;">reset</a>
           <div class="clearfix"></div>
@@ -198,10 +194,53 @@
   </div>
 
   <div class="row">
+    <div class="col-md-3">
+      </br></br></br></br><h5 class='notes'>(Click to filter)</h5>
+    </div>
+    <div class="col-md-9">
+      <div id="cleanby-chart">
+        <strong>Clean Institutions</strong>
+        <a class="reset" href="javascript:cleanbyChart.filterAll();dc.redrawAll();" style="display: none;">reset</a>
+        <div class="clearfix"></div>
+      </div>
+
+      <div id="open-close-chart">
+          <strong>Open/Closed</strong>
+          <a class="reset" href="javascript:openCloseChart.filterAll();dc.redrawAll();" style="display: none;">reset</a>
+          <div class="clearfix"></div>
+      </div>
+  
+      <div id="location-chart">
+        <strong>Location</strong>
+        <a class="reset" href="javascript:locationChart.filterAll();dc.redrawAll();" style="display: none;">reset</a>
+        <div class="clearfix"></div>
+      </div>
+
+<!--       <div id="status-chart">
+      </br></br>
+          <strong>Status</strong>
+          <a class="reset" href="javascript:statusChart.filterAll();dc.redrawAll();" style="display: none;">reset</a>
+          <div class="clearfix"></div>
+      </div> -->
+
+    </div>
+  </div>
+
+<!--   <div class="row">
       <div class="col-md-3" id='charts'>
         </br></br></br></br><h5 class='notes'>(Select a time range to zoom in)</h5>
       </div> 
-      <div id="monthly-volume-chart", class="col-md-9"></br></br>
+      <div id="open-close-chart", class="col-md-9"></br></br>
+        <strong>Open and Closed Graffiti Complaints</strong>
+      </div>
+  </div>
+  </br></br>   -->
+
+  <div class="row">
+      <div class="col-md-3" id='charts'>
+        </br></br></br></br><h5 class='notes'>(Select a time range to zoom in)</h5>
+      </div> 
+      <div id="monthly-volume-chart", class="col-md-9">
         <strong>Monthly Number of Graffiti Complaints</strong>
       </div>
   </div>
