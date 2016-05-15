@@ -70,7 +70,7 @@ d3.csv('data/closedincidents0511_chart.csv', function (data) {
 
     data.forEach(function (d) {
         d.dd = dateFormat.parse(d.opendate);
-        console.log(d.closedate)
+        // console.log(d.closedate)
         d.month = d3.time.month(d.dd); // pre-calculate month for better performance
         // d.close = +d.close; // coerce to number
         // d.open = +d.open;
