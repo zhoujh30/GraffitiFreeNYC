@@ -13,7 +13,7 @@ var boroughChart = dc.rowChart('#borough-chart');
 // var fluctuationChart = dc.barChart('#fluctuation-chart');
 var quarterChart = dc.rowChart('#quarter-chart');
 var dayOfWeekChart = dc.rowChart('#day-of-week-chart');
-// var opencloseChart = dc.lineChart('#open-close-chart');
+var openCloseTimeChart = dc.lineChart('#openCloseTime-chart');
 var volumeChart = dc.barChart('#monthly-volume-chart');
 var statusChart = dc.rowChart('#status-chart');
 var cleanbyChart = dc.rowChart('#cleanby-chart');
@@ -70,11 +70,12 @@ d3.csv('data/closedincidents0511_chart.csv', function (data) {
 
     data.forEach(function (d) {
         d.dd = dateFormat.parse(d.opendate);
+        console.log(d.closedate)
         d.month = d3.time.month(d.dd); // pre-calculate month for better performance
         // d.close = +d.close; // coerce to number
         // d.open = +d.open;
     });
-    // console.log(d.['date'], d[2])
+    
     //### Create Crossfilter Dimensions and Groups
 
     //See the [crossfilter API](https://github.com/square/crossfilter/wiki/API-Reference) for reference.
@@ -636,29 +637,30 @@ d3.csv('data/closedincidents0511_chart.csv', function (data) {
 
     //#### Stacked Area Chart
 
-    //Specify an area chart by using a line chart with `.renderArea(true)`.
+    // Specify an area chart by using a line chart with `.renderArea(true)`.
     // <br>API: [Stack Mixin](https://github.com/dc-js/dc.js/blob/master/web/docs/api-latest.md#stack-mixin),
     // [Line Chart](https://github.com/dc-js/dc.js/blob/master/web/docs/api-latest.md#line-chart)
-    // moveChart /* dc.lineChart('#monthly-move-chart', 'chartGroup') */
-    //     .renderArea(true)
-    //     .width(990)
-    //     .height(200)
-    //     .transitionDuration(1000)
-    //     .margins({top: 30, right: 50, bottom: 25, left: 40})
-    //     .dimension(moveMonths)
-    //     .mouseZoomable(true)
-    // // Specify a "range chart" to link its brush extent with the zoom of the current "focus chart".
-    //     .rangeChart(volumeChart)
-    //     .x(d3.time.scale().domain([new Date(2010, 1, 1), new Date(2016, 3, 16)]))
-    //     .round(d3.time.month.round)
-    //     .xUnits(d3.time.months)
-    //     .elasticY(true)
-    //     .renderHorizontalGridLines(true)
+    openCloseTimeChart /* dc.lineChart('#monthly-move-chart', 'chartGroup') */
+        .renderArea(true)
+        .width(720)
+        .height(200)
+        .transitionDuration(1000)
+        .margins({top: 5, right: 20, bottom: 35, left: 50})
+        .dimension(moveMonths)
+        .group(volumeByMonthGroup, 'Open Incidents')
+        .mouseZoomable(true)
+    // Specify a "range chart" to link its brush extent with the zoom of the current "focus chart".
+        .rangeChart(volumeChart)
+        .x(d3.time.scale().domain([new Date(2003, 1, 1), new Date(2016, 1, 1)]))
+        .round(d3.time.month.round)
+        .xUnits(d3.time.months)
+        .elasticY(true)
+        .renderHorizontalGridLines(true)
     // //##### Legend
 
     //     // Position the legend relative to the chart origin and specify items' height and separation.
-    //     .legend(dc.legend().x(800).y(10).itemHeight(13).gap(5))
-    //     .brushOn(false)
+        .legend(dc.legend().x(60).y(10).itemHeight(13).gap(5))
+        .brushOn(false)
     //     // Add the base layer of the stack with group. The second parameter specifies a series name for use in the
     //     // legend.
     //     // The `.valueAccessor` will be used for the base layer
