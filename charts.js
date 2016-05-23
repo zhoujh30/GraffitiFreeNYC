@@ -141,6 +141,29 @@ d3.csv('data/closedincidents0511_chart.csv', function (data) {
     var volumeByMonthGroup = moveMonths.group().reduceSum(function (d) {
         return d.number;
     });
+
+    // var resTimeByMonthGroup = moveMonths.group().reduceSum(function (d) {
+    //     return d.totalrestime;
+    // });
+
+
+    var resTimeByMonthGroup = moveMonths.group().reduce(reduceAdd, reduceRemove, reduceInitial);
+
+    function reduceAdd(p, v) {
+      ++p.number;
+      p.totalrestime += v.value;
+      return p;
+    }
+
+    function reduceRemove(p, v) {
+      --p.number;
+      p.totalrestime -= v.value;
+      return p;
+    }
+
+    function reduceInitial() {
+      return {number: 0, totalrestime: 0};
+    }
     // var indexAvgByMonthGroup = moveMonths.group().reduce(
     //     function (p, v) {
     //         ++p.days;
@@ -682,6 +705,8 @@ d3.csv('data/closedincidents0511_chart.csv', function (data) {
     //         return dateFormat(d.key) + '\n' + numberFormat(value);
     //     });
 
+
+
     //#### Range Chart
 
     // Since this bar chart is specified as "range chart" for the area chart, its brush extent
@@ -690,7 +715,7 @@ d3.csv('data/closedincidents0511_chart.csv', function (data) {
         .height(200)
         .margins({top: 5, right: 20, bottom: 30, left: 50})
         .dimension(moveMonths)
-        .group(volumeByMonthGroup)
+        .group(resTimeByMonthGroup)
         .centerBar(true)
         .gap(1)
         .x(d3.time.scale().domain([new Date(2003, 1 , 1), new Date(2016, 1, 1)]))
@@ -698,8 +723,10 @@ d3.csv('data/closedincidents0511_chart.csv', function (data) {
         .alwaysUseRounding(true)
         .xUnits(d3.time.months)
         .elasticY(true)
-        .renderHorizontalGridLines(true);
+        .renderHorizontalGridLines(true)
+        .valueAccessor(function(p) { return p.value.number > 0 ? p.value.totalrestime / p.value.number : 0;});
 
+// http://stackoverflow.com/questions/21519856/dc-js-how-to-get-the-average-of-a-column-in-data-set
 
     //#### Data Count
 
