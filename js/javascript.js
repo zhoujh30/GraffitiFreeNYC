@@ -13,7 +13,7 @@
     });
 
     // Choropleth
-    var layerUrl1 = 'https://jz1894.cartodb.com/api/v2/viz/19c01f9c-fe7f-11e5-a018-0ecfd53eb7d3/viz.json';
+    var layerUrl1 = 'https://jz1894.cartodb.com/api/v2/viz/6c203db2-2161-11e6-9320-0e5db1731f59/viz.json';
     
     var map1 = new L.Map('zipmap', { 
       center: [40.7127,-74.0059],
@@ -33,7 +33,7 @@
 
 
     // Times Series
-    var layerUrl2 = 'https://jz1894.cartodb.com/api/v2/viz/86bd6dc4-ef21-11e5-a907-0e3ff518bd15/viz.json';
+    var layerUrl2 = 'https://jz1894.cartodb.com/api/v2/viz/7d2b7b82-215f-11e6-96fd-0e674067d321/viz.json';
 
     var map2 = new L.Map('TimeSeriesMap', { 
       center: [40.7127,-74.0059],

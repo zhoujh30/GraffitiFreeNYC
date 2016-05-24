@@ -668,7 +668,7 @@ d3.csv('data/closedincidents0511_chart.csv', function (data) {
         .width(720)
         .height(200)
         .transitionDuration(1000)
-        .margins({top: 5, right: 20, bottom: 35, left: 50})
+        .margins({top: 5, right: 20, bottom: 60, left: 50})
         .dimension(moveMonths)
         .group(volumeByMonthGroup, 'Open Incidents')
         .mouseZoomable(true)
@@ -681,7 +681,7 @@ d3.csv('data/closedincidents0511_chart.csv', function (data) {
         .renderHorizontalGridLines(true)
     // //##### Legend
 
-    //     // Position the legend relative to the chart origin and specify items' height and separation.
+    //     // Position the  legend relative to the chart origin and specify items' height and separation.
         .legend(dc.legend().x(60).y(10).itemHeight(13).gap(5))
         .brushOn(false)
     //     // Add the base layer of the stack with group. The second parameter specifies a series name for use in the
@@ -715,7 +715,8 @@ d3.csv('data/closedincidents0511_chart.csv', function (data) {
         .height(200)
         .margins({top: 5, right: 20, bottom: 30, left: 50})
         .dimension(moveMonths)
-        .group(resTimeByMonthGroup)
+        // .group(resTimeByMonthGroup)
+        .group(volumeByMonthGroup)
         .centerBar(true)
         .gap(1)
         .x(d3.time.scale().domain([new Date(2003, 1 , 1), new Date(2016, 1, 1)]))
@@ -724,7 +725,7 @@ d3.csv('data/closedincidents0511_chart.csv', function (data) {
         .xUnits(d3.time.months)
         .elasticY(true)
         .renderHorizontalGridLines(true)
-        .valueAccessor(function(p) { return p.value.number > 0 ? p.value.totalrestime / p.value.number : 0;});
+        // .valueAccessor(function(p) { return p.value.number > 0 ? p.value.totalrestime / p.value.number : 0;});
 
 // http://stackoverflow.com/questions/21519856/dc-js-how-to-get-the-average-of-a-column-in-data-set
 
