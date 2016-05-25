@@ -184,9 +184,9 @@ d3.csv('data/closedincidents0511_chart.csv', function (data) {
 
     // Create categorical dimension
     var status = ndx.dimension(function (d) {
-        if (d.ra.includes('CannotLocateProperty')){
+        if (d.ra =='CannotLocateProperty' ){
             return 'Cannot Locate Property';
-        } else if (d.ra.includes('DownloadedForCleaning')) {
+        } else if (d.ra == 'DownloadedForCleaning') {
             return 'Downloaded For Cleaning';
         } else if (d.ra == 'NoGraffitiOnProperty') {
             return 'No Graffiti On Property';
