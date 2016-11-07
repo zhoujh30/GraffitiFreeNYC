@@ -80,5 +80,9 @@ svg {
   fill: black;
 }
 
+#openCloseTime-chart .x.axis text {
+    text-anchor: end !important;
+    transform: rotate(-45deg);
+}
 
 

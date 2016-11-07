@@ -42,21 +42,17 @@
         <ul class="nav navbar-nav">
           <li class="active"><a href="#about">About<span class="sr-only">(current)</span></a></li>
           </li> -->
-          <li><a href="#charts">Charts</a></li>
-          <!-- <li><a href="#nta">Choropleth</a></li> -->
+<!--           <li><a href="#charts">Charts</a></li>
+          <li><a href="#nta">Choropleth</a></li>
+          <li><a href="#TimeSeries">Time Series</a></li> -->
           <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Choropleth<span class="caret"></span></a>
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Analysis<span class="caret"></span></a>
             <ul class="dropdown-menu">
-              <li><a href="#nta">By Neighborhood Tabulation Area</a></li>
-              <li><a href="#zip">By Zip Code</a></li>
-              <!-- <li><a href="#">Something else here</a></li> -->
-              <!-- <li role="separator" class="divider"></li>
-              <li><a href="https://db.tt/yoFH3baF", target="_blank">Neighborhood Planning Tool</a></li>
-              <li role="separator" class="divider"></li>
-              <li><a href="https://github.com/zhoujh30/PUI2015_jzhou/blob/master/Final/PUI2015_final_JianhaoZhou.ipynb", target="_blank">Asthma Factor Study</a></li> -->
+              <li><a href="#charts">Charts</a></li>
+              <li><a href="#nta">Choropleth</a></li>
+              <li><a href="#TimeSeries">Time Series</a></li>
             </ul>
           </li>
-          <li><a href="#TimeSeries">Time Series</a></li>
         </ul>
        <!--  <form class="navbar-form navbar-left" role="search">
           <div class="form-group">
@@ -111,7 +107,7 @@
                 </div>
               </div>
             </form> -->
-          For any inquiries, email me at <a class="btn btn-primary emailbutton" role="button" href="mailto:felix.zhou@nyu.edu">felix.zhou@nyu.edu</a>
+          For any inquiries, email us at <a class="btn btn-primary emailbutton" role="button" href="mailto:fzhou@edc.nyc">fzhou@edc.nyc</a> or check out our <a class="btn btn-primary emailbutton" role="button" href="https://github.com/zhoujh30/GraffitiFreeNYC/tree/gh-pages", target="_blank">Github</a>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -141,7 +137,7 @@
         <img src="data/pic.jpg" class="img-rounded" id='picImg'>
         </br>
         </br>
-        This site takes the advantage of 311 graffiti service requests data from 01/01/2010 to 12/31/2015 from <a href="https://nycopendata.socrata.com/Social-Services/311-Service-Requests-from-2010-to-Present/erm2-nwe9", target="_blank">NYC Open Data</a> and provides a visualization of graffiti complaints using <a href="http://leafletjs.com/", target="_blank">Leaflet</a>, <a href="https://www.arcgis.com/", target="_blank">ArcGIS</a>, <a href="https://cartodb.com/", target="_blank">CartoDB</a>, <a href="http://getbootstrap.com/", target="_blank">Bootstrap</a>, and <a href="http://dc-js.github.io/dc.js/", target="_blank">dc.js</a>.</p>
+        This site takes the advantage of graffiti service requests data from 01/01/2004 to 12/31/2013 from <a href="https://nycopendata.socrata.com/Social-Services/311-Service-Requests-from-2010-to-Present/erm2-nwe9", target="_blank">NYC Open Data</a> and provides a visualization of graffiti complaints using <a href="http://leafletjs.com/", target="_blank">Leaflet</a>, <a href="https://www.arcgis.com/", target="_blank">ArcGIS</a>, <a href="https://cartodb.com/", target="_blank">CartoDB</a>, <a href="http://getbootstrap.com/", target="_blank">Bootstrap</a>, and <a href="http://dc-js.github.io/dc.js/", target="_blank">dc.js</a>.</p>
     </div>
   </div>
   </br>
@@ -154,15 +150,14 @@
     <div class="container",class="col-md-9">
       </br>
       <div class="container",class="col-md-9">
-      <p class="col-md-9">Let's take a look at the total number of graffiti complaints by quarters, by day of week, by boroughs, by status, and by months. </br></br>There are slightly more complaints in quarter 2 (April, May, and June) than other three quarters. You can have a better sense of the yearly pattern with the monthly chart below. Meanwhile, more complaints arise on weekdays and in mixed use areas. Brooklyn outperforms the other four boroughs while Staten Island has the least complaints.</br></br>For number of complaints by quarters, boroughs, and status, we might be more confident to conclude that larger number of complaints means more graffiti created. For complaints by day of week, however, it may also result from people's tendency to complain on weekdays as opposed to weekends (if for properties near their workplace).</br></br>
-      Explore and interact with the charts!</p> 
+      <p class="col-md-9">Let's take a look at the total number of graffiti complaints by quarter, day of week, borough, status, clean institution, open/closed, location, and month. </br></br>There are slightly more complaints in quarter 2 (April, May, and June) than other three quarters. You can have a better sense of the yearly pattern with the monthly chart below. Meanwhile, more complaints arise on weekdays and in mixed use areas. Brooklyn outperforms the other four boroughs while Staten Island has the least complaints.</br></br>For number of complaints by quarters, boroughs, and status, we might be more confident to conclude that larger number of complaints means more graffiti created. For complaints by day of week, however, it may also result from people's tendency to complain on weekdays as opposed to weekends (if for properties near their workplace).</br></br>
+      Explore and interact with the charts!</p></br>
       </div>
     </div>
   </div>
     
   <div class="row">
     <div class="col-md-3">
-      </br></br></br></br><h5 class='notes'>(Click to filter)</h5>
     </div>
     <div class="col-md-9">
       <div id="quarter-chart">
@@ -219,14 +214,14 @@
     </div>
   </div>
 
-  <div class="row">
+<!--   <div class="row">
       <div class="col-md-3" id='charts'>
         </br></br></br></br><h5 class='notes'></h5>
       </div> 
       <div id="openCloseTime-chart", class="col-md-9"></br></br>
-        <strong>Open and Closed Graffiti Complaints</strong>
+        <strong>Monthly Open Graffiti Complaints</strong>
       </div>
-  </div>
+  </div> -->
 
   <div class="row">
       <div class="col-md-3" id='charts'>
@@ -267,7 +262,7 @@
   </br>
 
 
-  <div class="row">
+<!--   <div class="row">
     <div class="col-md-3" id='zip'>
       <h1>Choropleth</h1>
     </div>
@@ -287,7 +282,7 @@
       </br>
     </div>
   </div>
-  </br></br>
+  </br></br> -->
         
 
   <div class="row">

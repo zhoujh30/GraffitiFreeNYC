@@ -70,7 +70,7 @@ d3.csv('data/closedincidents0511_chart.csv', function (data) {
 
     data.forEach(function (d) {
         d.dd = dateFormat.parse(d.opendate);
-        console.log(d.closedate)
+        // console.log(d.closedate)
         d.month = d3.time.month(d.dd); // pre-calculate month for better performance
         // d.close = +d.close; // coerce to number
         // d.open = +d.open;
@@ -141,6 +141,29 @@ d3.csv('data/closedincidents0511_chart.csv', function (data) {
     var volumeByMonthGroup = moveMonths.group().reduceSum(function (d) {
         return d.number;
     });
+
+    // var resTimeByMonthGroup = moveMonths.group().reduceSum(function (d) {
+    //     return d.totalrestime;
+    // });
+
+
+    var resTimeByMonthGroup = moveMonths.group().reduce(reduceAdd, reduceRemove, reduceInitial);
+
+    function reduceAdd(p, v) {
+      ++p.number;
+      p.totalrestime += v.value;
+      return p;
+    }
+
+    function reduceRemove(p, v) {
+      --p.number;
+      p.totalrestime -= v.value;
+      return p;
+    }
+
+    function reduceInitial() {
+      return {number: 0, totalrestime: 0};
+    }
     // var indexAvgByMonthGroup = moveMonths.group().reduce(
     //     function (p, v) {
     //         ++p.days;
@@ -161,9 +184,9 @@ d3.csv('data/closedincidents0511_chart.csv', function (data) {
 
     // Create categorical dimension
     var status = ndx.dimension(function (d) {
-        if (d.ra.includes('CannotLocateProperty')){
+        if (d.ra =='CannotLocateProperty' ){
             return 'Cannot Locate Property';
-        } else if (d.ra.includes('DownloadedForCleaning')) {
+        } else if (d.ra == 'DownloadedForCleaning') {
             return 'Downloaded For Cleaning';
         } else if (d.ra == 'NoGraffitiOnProperty') {
             return 'No Graffiti On Property';
@@ -645,7 +668,7 @@ d3.csv('data/closedincidents0511_chart.csv', function (data) {
         .width(720)
         .height(200)
         .transitionDuration(1000)
-        .margins({top: 5, right: 20, bottom: 35, left: 50})
+        .margins({top: 5, right: 20, bottom: 60, left: 50})
         .dimension(moveMonths)
         .group(volumeByMonthGroup, 'Open Incidents')
         .mouseZoomable(true)
@@ -658,7 +681,7 @@ d3.csv('data/closedincidents0511_chart.csv', function (data) {
         .renderHorizontalGridLines(true)
     // //##### Legend
 
-    //     // Position the legend relative to the chart origin and specify items' height and separation.
+    //     // Position the  legend relative to the chart origin and specify items' height and separation.
         .legend(dc.legend().x(60).y(10).itemHeight(13).gap(5))
         .brushOn(false)
     //     // Add the base layer of the stack with group. The second parameter specifies a series name for use in the
@@ -682,6 +705,8 @@ d3.csv('data/closedincidents0511_chart.csv', function (data) {
     //         return dateFormat(d.key) + '\n' + numberFormat(value);
     //     });
 
+
+
     //#### Range Chart
 
     // Since this bar chart is specified as "range chart" for the area chart, its brush extent
@@ -690,6 +715,7 @@ d3.csv('data/closedincidents0511_chart.csv', function (data) {
         .height(200)
         .margins({top: 5, right: 20, bottom: 30, left: 50})
         .dimension(moveMonths)
+        // .group(resTimeByMonthGroup)
         .group(volumeByMonthGroup)
         .centerBar(true)
         .gap(1)
@@ -698,8 +724,10 @@ d3.csv('data/closedincidents0511_chart.csv', function (data) {
         .alwaysUseRounding(true)
         .xUnits(d3.time.months)
         .elasticY(true)
-        .renderHorizontalGridLines(true);
+        .renderHorizontalGridLines(true)
+        // .valueAccessor(function(p) { return p.value.number > 0 ? p.value.totalrestime / p.value.number : 0;});
 
+// http://stackoverflow.com/questions/21519856/dc-js-how-to-get-the-average-of-a-column-in-data-set
 
     //#### Data Count
 
